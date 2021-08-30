@@ -1,5 +1,6 @@
 package com.physio.node.webservice.model.JPA;
 
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -21,6 +22,7 @@ public class Ailment implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idailment;
 
+	@Lob
 	@Column(name="ailment_description")
 	private String ailmentDescription;
 

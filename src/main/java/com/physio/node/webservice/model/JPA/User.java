@@ -1,6 +1,6 @@
 package com.physio.node.webservice.model.JPA;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
@@ -21,11 +21,14 @@ public class User implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int iduser;
 
-	@Column(name="`user_email`")
+	@Column(name="user_email")
 	private String userEmail;
 
 	@Column(name="user_name")
 	private String userName;
+
+	@Column(name="user_surname")
+	private String userSurname;
 
 	//bi-directional many-to-one association to Ailment
 	@OneToMany(mappedBy="user")
@@ -38,19 +41,19 @@ public class User implements Serializable {
 	@JsonManagedReference
 	private UserRole userRole;
 
-	//bi-directional many-to-many association to Group
+	//bi-directional many-to-many association to Mygroup
 	@ManyToMany
 	@JoinTable(
-		name="user_groups"
+		name="user_mygroup"
 		, joinColumns={
 			@JoinColumn(name="user_iduser")
 			}
 		, inverseJoinColumns={
-			@JoinColumn(name="group_idgroup")
+			@JoinColumn(name="mygroup_idmygroup")
 			}
 		)
-	@JsonBackReference
-	private List<Group> groups;
+	@JsonManagedReference
+	private List<Mygroup> mygroups;
 
 	public User() {
 	}
@@ -63,12 +66,12 @@ public class User implements Serializable {
 		this.iduser = iduser;
 	}
 
-	public String getUserE_mail() {
+	public String getUserEmail() {
 		return this.userEmail;
 	}
 
-	public void setUserE_mail(String userE_mail) {
-		this.userEmail = userE_mail;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
 	public String getUserName() {
@@ -77,6 +80,14 @@ public class User implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getUserSurname() {
+		return this.userSurname;
+	}
+
+	public void setUserSurname(String userSurname) {
+		this.userSurname = userSurname;
 	}
 
 	public List<Ailment> getAilments() {
@@ -109,12 +120,12 @@ public class User implements Serializable {
 		this.userRole = userRole;
 	}
 
-	public List<Group> getGroups() {
-		return this.groups;
+	public List<Mygroup> getMygroups() {
+		return this.mygroups;
 	}
 
-	public void setGroups(List<Group> groups) {
-		this.groups = groups;
+	public void setMygroups(List<Mygroup> mygroups) {
+		this.mygroups = mygroups;
 	}
 
 }
