@@ -15,10 +15,16 @@ public class AilmentService {
     public AilmentService(AilmentTaskRepository ailmentTaskRepository) {
         this.ailmentTaskRepository = ailmentTaskRepository;
     }
-    public List<AilmentDTO> getUserAilment(int id){  //by id
+    public List<AilmentDTO> findUserAilmentByIdUser(int id){  //by id
         return ailmentTaskRepository.findAllByUserIduser(id)
                 .stream().
                         map(AilmentDTO::new).
                         collect(Collectors.toList());
+    }
+    public AilmentDTO findAilmentByIdAilment(int id){  //by id
+        return ailmentTaskRepository.findAllByUserIduser(id)
+                .stream().
+                        map(AilmentDTO::new).
+                        collect(Collectors.toList()).get(0);
     }
 }

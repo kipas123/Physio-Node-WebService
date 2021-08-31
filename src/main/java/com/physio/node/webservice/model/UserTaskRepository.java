@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserTaskRepository {
-    Optional<User> findById(Integer id);
     List<User> findAll();
+    List<User> findByIduser(int id);
     List<User> findByUserName(String username);
-//    User getUser(@Param("name") String userName);
 
 }

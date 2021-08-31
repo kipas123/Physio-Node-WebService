@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 public class UserDTO {
-    public int userId;
-    public String userName;
-    public String userEmail;
-    public String userSurname;
+    private int userId;
+    private String userName;
+    private String userEmail;
+    private String userSurname;
 
     public UserDTO(User user) {
         this.userName = user.getUserName();

@@ -16,8 +16,12 @@ public class AilmentTaskController {
         this.ailmentService = ailmentService;
     }
 
+    @GetMapping("/user/{id}")
+    List<AilmentDTO> getUserAilmentByIdUser(@PathVariable int id){
+        return ailmentService.findUserAilmentByIdUser(id);
+    }
     @GetMapping("/{id}")
-    List<AilmentDTO> findUserAilment(@PathVariable int id){
-        return ailmentService.getUserAilment(id);
+    AilmentDTO getAilmentByIdAilment(@PathVariable int id){
+        return ailmentService.findAilmentByIdAilment(id);
     }
 }

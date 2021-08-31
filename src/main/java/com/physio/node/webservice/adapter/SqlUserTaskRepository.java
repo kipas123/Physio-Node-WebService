@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface SqlUserTaskRepository extends UserTaskRepository, JpaRepository<User, Integer> {
-//    @Query("select b from User b join fetch b.groups where b.userName = :name")
-//    User getUser(@Param("name") String userName);
+
 }

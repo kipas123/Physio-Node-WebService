@@ -16,8 +16,8 @@ public class UserService {
         this.userTaskRepository = userTaskRepository;
     }
 
-    public UserDTO getUserbyID(String username){
-        return userTaskRepository.findByUserName(username)
+    public UserDTO findUserByIdUser(int id){
+        return userTaskRepository.findByIduser(id)
                 .stream().
                         map(UserDTO::new).
                         collect(Collectors.toList()).get(0);

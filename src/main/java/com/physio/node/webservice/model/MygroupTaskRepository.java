@@ -4,6 +4,7 @@ import com.physio.node.webservice.model.JPA.Mygroup;
 
 import java.util.List;
 
-public interface GroupTaskRepository {
+public interface MygroupTaskRepository {
     List<Mygroup> findAllByUsers_Iduser(int id);
+    List<Mygroup> findAll();
 }
