@@ -26,12 +26,24 @@ public class Mygroup implements Serializable {
 	@Column(name="mygroup_name")
 	private String mygroupName;
 
+	//bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name="founder_iduser")
+	@JsonBackReference
+	private User founder;
+
 	//bi-directional many-to-many association to User
 	@ManyToMany(mappedBy="mygroups")
 	@JsonBackReference
 	private List<User> users;
 
 	public Mygroup() {
+	}
+
+	public Mygroup(String mygroupName, String mygroupDescription, User founder) {
+		this.mygroupName = mygroupName;
+		this.mygroupDescription = mygroupDescription;
+		this.founder = founder;
 	}
 
 	public int getIdmygroup() {
@@ -56,6 +68,14 @@ public class Mygroup implements Serializable {
 
 	public void setMygroupName(String mygroupName) {
 		this.mygroupName = mygroupName;
+	}
+
+	public User getFounder() {
+		return founder;
+	}
+
+	public void setFounder(User founder) {
+		this.founder = founder;
 	}
 
 	public List<User> getUsers() {

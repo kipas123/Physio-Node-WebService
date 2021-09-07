@@ -29,7 +29,7 @@ public class AilmentNote implements Serializable {
 
 	//bi-directional many-to-one association to Ailment
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value="ailmentNotes")
 	private Ailment ailment;
 
 	public AilmentNote() {

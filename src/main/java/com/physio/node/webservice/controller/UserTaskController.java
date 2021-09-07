@@ -2,6 +2,8 @@ package com.physio.node.webservice.controller;
 
 import com.physio.node.webservice.adapter.SqlMygroupTaskRepository;
 import com.physio.node.webservice.model.DTO.UserDTO;
+import com.physio.node.webservice.model.JPA.User;
+import com.physio.node.webservice.model.JPA.UserRole;
 import com.physio.node.webservice.model.MygroupTaskRepository;
 import com.physio.node.webservice.model.UserTaskRepository;
 import com.physio.node.webservice.service.UserService;
@@ -31,4 +33,14 @@ public class UserTaskController {
         return userService.findUserByIdUser(id);
     }
 
+//    @GetMapping("/testjpa")
+//    void test(){
+//        User user = new User();
+//        UserRole userRole = new UserRole();
+//        userRole.setIduserRole(1);
+//        user.setUserName("TestujeJpass");
+//        user.setUserSurname("TestujeJpass");
+//        user.setUserEmail("Testuje@jspa.com");
+//        userTaskRepository.save(user);
+//    }
 }

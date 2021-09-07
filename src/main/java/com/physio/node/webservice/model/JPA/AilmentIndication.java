@@ -29,7 +29,7 @@ public class AilmentIndication implements Serializable {
 
 	//bi-directional many-to-one association to Ailment
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value="ailmentIndications")
 	private Ailment ailment;
 
 	public AilmentIndication() {

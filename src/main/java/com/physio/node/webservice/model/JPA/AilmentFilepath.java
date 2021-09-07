@@ -25,7 +25,7 @@ public class AilmentFilepath implements Serializable {
 
 	//bi-directional many-to-one association to Ailment
 	@ManyToOne
-	@JsonBackReference
+	@JsonBackReference(value="ailmentFilepaths")
 	private Ailment ailment;
 
 	public AilmentFilepath() {

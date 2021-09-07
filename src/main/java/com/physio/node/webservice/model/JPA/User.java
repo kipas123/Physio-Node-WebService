@@ -1,10 +1,10 @@
 package com.physio.node.webservice.model.JPA;
 
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 
@@ -21,6 +21,10 @@ public class User implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int iduser;
 
+	@Temporal(TemporalType.DATE)
+	@Column(name="user_dob")
+	private Date userDob;
+
 	@Column(name="user_email")
 	private String userEmail;
 
@@ -32,17 +36,22 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Ailment
 	@OneToMany(mappedBy="user")
-	@JsonManagedReference
-	private List<Ailment> ailments;
+	@JsonManagedReference(value="user_iduser")
+	private List<Ailment> userAilment;
 
-	//bi-directional many-to-one association to UserRole
-	@ManyToOne
-	@JoinColumn(name="user_role_iduser_role")
+	//bi-directional many-to-one association to Ailment
+	@OneToMany(mappedBy="attendingphysician")
+	@JsonManagedReference(value="attendingphysician_iduser")
+	private List<Ailment> attendingphysicianAilment;
+
+	//bi-directional many-to-one association to Mygroup
+	@OneToMany(mappedBy="founder")
 	@JsonManagedReference
-	private UserRole userRole;
+	private List<Mygroup> founderMygroups;
 
 	//bi-directional many-to-many association to Mygroup
 	@ManyToMany
+	@JsonManagedReference
 	@JoinTable(
 		name="user_mygroup"
 		, joinColumns={
@@ -52,8 +61,13 @@ public class User implements Serializable {
 			@JoinColumn(name="mygroup_idmygroup")
 			}
 		)
-	@JsonManagedReference
 	private List<Mygroup> mygroups;
+
+	//bi-directional many-to-one association to UserRole
+	@ManyToOne
+	@JsonManagedReference
+	@JoinColumn(name="user_role_iduser_role")
+	private UserRole userRole;
 
 	public User() {
 	}
@@ -64,6 +78,14 @@ public class User implements Serializable {
 
 	public void setIduser(int iduser) {
 		this.iduser = iduser;
+	}
+
+	public Date getUserDob() {
+		return this.userDob;
+	}
+
+	public void setUserDob(Date userDob) {
+		this.userDob = userDob;
 	}
 
 	public String getUserEmail() {
@@ -90,26 +112,71 @@ public class User implements Serializable {
 		this.userSurname = userSurname;
 	}
 
-	public List<Ailment> getAilments() {
-		return this.ailments;
+	List<Ailment> getUserAilment() {
+		return userAilment;
 	}
 
-	public void setAilments(List<Ailment> ailments) {
-		this.ailments = ailments;
+	void setUserAilment(List<Ailment> userAilment) {
+		this.userAilment = userAilment;
 	}
 
-	public Ailment addAilment(Ailment ailment) {
-		getAilments().add(ailment);
-		ailment.setUser(this);
-
-		return ailment;
+	List<Ailment> getAttendingphysicianAilment() {
+		return attendingphysicianAilment;
 	}
 
-	public Ailment removeAilment(Ailment ailment) {
-		getAilments().remove(ailment);
-		ailment.setUser(null);
+	void setAttendingphysicianAilment(List<Ailment> attendingphysicianAilment) {
+		this.attendingphysicianAilment = attendingphysicianAilment;
+	}
 
-		return ailment;
+	public Ailment addUserAilment(Ailment userAilment) {
+		getUserAilment().add(userAilment);
+		userAilment.setUser(this);
+
+		return userAilment;
+	}
+
+	public Ailment removeAilments1(Ailment userAilment) {
+		getUserAilment().remove(userAilment);
+		userAilment.setUser(null);
+
+		return userAilment;
+	}
+
+	public Ailment addAttendingphysicianAilment(Ailment attendingphysicianAilment) {
+		getAttendingphysicianAilment().add(attendingphysicianAilment);
+		attendingphysicianAilment.setAttendingphysician(this);
+
+		return attendingphysicianAilment;
+	}
+
+	public Ailment removeAttendingphysicianAilment(Ailment attendingphysicianAilment) {
+		getAttendingphysicianAilment().remove(attendingphysicianAilment);
+		attendingphysicianAilment.setAttendingphysician(null);
+
+		return attendingphysicianAilment;
+	}
+
+
+	public Mygroup addFounderMygroups(Mygroup founderMygroups) {
+		getFounderMygroups().add(founderMygroups);
+		founderMygroups.setFounder(this);
+
+		return founderMygroups;
+	}
+
+	public Mygroup removeFounderMygroups(Mygroup founderMygroups) {
+		getFounderMygroups().remove(founderMygroups);
+		founderMygroups.setFounder(null);
+
+		return founderMygroups;
+	}
+
+	List<Mygroup> getFounderMygroups() {
+		return founderMygroups;
+	}
+
+	void setFounderMygroups(List<Mygroup> founderMygroups) {
+		this.founderMygroups = founderMygroups;
 	}
 
 	public UserRole getUserRole() {
@@ -118,14 +185,6 @@ public class User implements Serializable {
 
 	public void setUserRole(UserRole userRole) {
 		this.userRole = userRole;
-	}
-
-	public List<Mygroup> getMygroups() {
-		return this.mygroups;
-	}
-
-	public void setMygroups(List<Mygroup> mygroups) {
-		this.mygroups = mygroups;
 	}
 
 }

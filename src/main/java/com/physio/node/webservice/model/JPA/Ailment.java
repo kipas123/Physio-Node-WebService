@@ -1,6 +1,5 @@
 package com.physio.node.webservice.model.JPA;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -22,7 +21,6 @@ public class Ailment implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idailment;
 
-	@Lob
 	@Column(name="ailment_description")
 	private String ailmentDescription;
 
@@ -31,25 +29,38 @@ public class Ailment implements Serializable {
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JsonBackReference
+	@JoinColumn(name="user_iduser")
+	@JsonBackReference(value="user_iduser")
 	private User user;
+
+	//bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name="attendingphysician_iduser")
+	@JsonBackReference(value="attendingphysician_iduser")
+	private User attendingphysician;
 
 	//bi-directional many-to-one association to AilmentFilepath
 	@OneToMany(mappedBy="ailment")
-	@JsonManagedReference
+	@JsonManagedReference(value="ailmentFilepaths")
 	private List<AilmentFilepath> ailmentFilepaths;
 
 	//bi-directional many-to-one association to AilmentIndication
 	@OneToMany(mappedBy="ailment")
-	@JsonManagedReference
+	@JsonManagedReference(value="ailmentIndications")
 	private List<AilmentIndication> ailmentIndications;
 
 	//bi-directional many-to-one association to AilmentNote
 	@OneToMany(mappedBy="ailment")
-	@JsonManagedReference
+	@JsonManagedReference(value="ailmentNotes")
 	private List<AilmentNote> ailmentNotes;
 
 	public Ailment() {
+	}
+	public Ailment(String ailmentName, String ailmentDescription, User user, User attendingphysician) {
+		this.ailmentName = ailmentName;
+		this.ailmentDescription = ailmentDescription;
+		this.user = user;
+		this.attendingphysician=attendingphysician;
 	}
 
 	public int getIdailment() {
@@ -76,16 +87,26 @@ public class Ailment implements Serializable {
 		this.ailmentName = ailmentName;
 	}
 
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 	public List<AilmentFilepath> getAilmentFilepaths() {
 		return this.ailmentFilepaths;
+	}
+
+
+	User getUser() {
+		return user;
+	}
+
+	void setUser(User user) {
+		this.user = user;
+	}
+
+	User getAttendingphysician() {
+		return attendingphysician;
+	}
+
+	void setAttendingphysician(User attendingphysician) {
+		this.attendingphysician = attendingphysician;
 	}
 
 	public void setAilmentFilepaths(List<AilmentFilepath> ailmentFilepaths) {

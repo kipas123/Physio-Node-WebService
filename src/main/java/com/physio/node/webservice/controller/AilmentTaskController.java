@@ -1,7 +1,9 @@
 package com.physio.node.webservice.controller;
 
 import com.physio.node.webservice.model.DTO.AilmentDTO;
+import com.physio.node.webservice.model.DTO.MyGroupDTO;
 import com.physio.node.webservice.service.AilmentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,5 +25,12 @@ public class AilmentTaskController {
     @GetMapping("/{id}")
     AilmentDTO getAilmentByIdAilment(@PathVariable int id){
         return ailmentService.findAilmentByIdAilment(id);
+    }
+
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createGroup(@RequestBody AilmentDTO ailmentDTO){
+        ailmentService.createAilment(ailmentDTO);
+        return ResponseEntity.noContent().build();
     }
 }

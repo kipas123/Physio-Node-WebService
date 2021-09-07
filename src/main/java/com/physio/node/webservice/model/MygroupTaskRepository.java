@@ -7,4 +7,5 @@ import java.util.List;
 public interface MygroupTaskRepository {
     List<Mygroup> findAllByUsers_Iduser(int id);
     List<Mygroup> findAll();
+    Mygroup save(Mygroup entity);
 }
