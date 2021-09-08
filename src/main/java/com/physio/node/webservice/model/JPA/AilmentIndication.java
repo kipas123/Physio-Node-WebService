@@ -35,6 +35,12 @@ public class AilmentIndication implements Serializable {
 	public AilmentIndication() {
 	}
 
+	public AilmentIndication(String indicationHeader, String indicationDescription, Ailment ailment){
+		this.indicationHeader = indicationHeader;
+		this.indicationDescription = indicationDescription;
+		this.ailment = ailment;
+	}
+
 	public int getIdailmentIndication() {
 		return this.idailmentIndication;
 	}

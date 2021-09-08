@@ -13,19 +13,23 @@ import java.util.stream.Collectors;
 
 @Data
 public class AilmentDTO {
+    private int idailment;
     private String ailmentDescription;
     private String ailmentName;
     private List<AilmentNoteDTO>  ailmentNotes;
     private List<AilmentIndicationDTO>  ailmentIndications;
     private List<AilmentFilepathDTO>  ailmentFilepaths;
 
+    public AilmentDTO(){}
 
-    public AilmentDTO(String ailmentName, String ailmentDescription){
+    public AilmentDTO(int idailment, String ailmentName, String ailmentDescription){
+        this.idailment = idailment;
         this.ailmentName = ailmentName;
         this.ailmentDescription = ailmentDescription;
     }
 
     public AilmentDTO(Ailment ailment) {
+        this.idailment = ailment.getIdailment();
         this.ailmentDescription = ailment.getAilmentDescription();
         this.ailmentName = ailment.getAilmentName();
         this.ailmentNotes = ailment.getAilmentNotes().stream().map(AilmentNoteDTO::new).collect(Collectors.toList());

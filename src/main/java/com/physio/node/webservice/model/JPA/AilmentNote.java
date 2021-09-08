@@ -35,6 +35,12 @@ public class AilmentNote implements Serializable {
 	public AilmentNote() {
 	}
 
+	public AilmentNote(String noteHeader, String noteDescription, Ailment ailment){
+		this.noteHeader = noteHeader;
+		this.noteDescription = noteDescription;
+		this.ailment = ailment;
+	}
+
 	public int getIdailmentNote() {
 		return this.idailmentNote;
 	}

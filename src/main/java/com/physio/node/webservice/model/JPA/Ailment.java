@@ -56,6 +56,10 @@ public class Ailment implements Serializable {
 
 	public Ailment() {
 	}
+	public Ailment(int idailment){
+		this.idailment = idailment;
+	}
+
 	public Ailment(String ailmentName, String ailmentDescription, User user, User attendingphysician) {
 		this.ailmentName = ailmentName;
 		this.ailmentDescription = ailmentDescription;
