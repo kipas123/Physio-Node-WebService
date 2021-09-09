@@ -45,9 +45,9 @@ public class User implements Serializable {
 	private List<Ailment> attendingphysicianAilment;
 
 	//bi-directional many-to-one association to Mygroup
-	@OneToMany(mappedBy="founder")
+	@OneToMany(mappedBy="mygroupFounder")
 	@JsonManagedReference
-	private List<Mygroup> founderMygroups;
+	private List<Mygroup> mygroupFounder;
 
 	//bi-directional many-to-many association to Mygroup
 	@ManyToMany
@@ -157,26 +157,26 @@ public class User implements Serializable {
 	}
 
 
-	public Mygroup addFounderMygroups(Mygroup founderMygroups) {
-		getFounderMygroups().add(founderMygroups);
-		founderMygroups.setFounder(this);
+	public Mygroup addFounderMygroups(Mygroup mygroupFounder) {
+		getFounderMygroups().add(mygroupFounder);
+		mygroupFounder.setMygroupFounder(this);
 
-		return founderMygroups;
+		return mygroupFounder;
 	}
 
-	public Mygroup removeFounderMygroups(Mygroup founderMygroups) {
-		getFounderMygroups().remove(founderMygroups);
-		founderMygroups.setFounder(null);
+	public Mygroup removeFounderMygroups(Mygroup mygroupFounder) {
+		getFounderMygroups().remove(mygroupFounder);
+		mygroupFounder.setMygroupFounder(null);
 
-		return founderMygroups;
+		return mygroupFounder;
 	}
 
 	List<Mygroup> getFounderMygroups() {
-		return founderMygroups;
+		return mygroupFounder;
 	}
 
 	void setFounderMygroups(List<Mygroup> founderMygroups) {
-		this.founderMygroups = founderMygroups;
+		this.mygroupFounder = founderMygroups;
 	}
 
 	public UserRole getUserRole() {

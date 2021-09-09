@@ -5,14 +5,17 @@ import lombok.Data;
 
 @Data
 public class MyGroupDTO {
+
     private int idMygroup;
     private String mygroupName;
     private String mygroupDescription;
-    private String mygroupCreatedBy;
+    private String mygroupFounder;
 
-    public MyGroupDTO(String mygroupName, String mygroupDescription){
+    public MyGroupDTO(int idMygroup, String mygroupName, String mygroupDescription, String mygroupFounder){
+        this.idMygroup = idMygroup;
         this.mygroupName = mygroupName;
         this.mygroupDescription = mygroupDescription;
+        this.mygroupFounder = mygroupFounder;
     }
 
 
@@ -20,7 +23,7 @@ public class MyGroupDTO {
         this.idMygroup = mygroup.getIdmygroup();
         this.mygroupName = mygroup.getMygroupName();
         this.mygroupDescription = mygroup.getMygroupDescription();
-        this.mygroupCreatedBy = mygroup.getFounder().getUserName();
+        this.mygroupFounder = mygroup.getMygroupFounder().getUserName() + " " +mygroup.getMygroupFounder().getUserSurname();
     }
 
 }

@@ -19,11 +19,15 @@ public class MygroupTaskController {
         this.mygroupService = mygroupService;
         this.mygroupTaskRepository = mygroupTaskRepository;
     }
-    @GetMapping("/{id}")
+    @GetMapping("/all/{id}")
     List<MyGroupDTO> getAllGroupsByUserId(@PathVariable int id){
         return mygroupService.findAllGroupsByUserId(id);
     }
 
+    @GetMapping("/{id}")
+    MyGroupDTO getGroupByGroupId(@PathVariable int id){
+        return mygroupService.findGroupByGroupId(id);
+    }
 
     @GetMapping("/all")
     List<MyGroupDTO> getAllGroups(){
@@ -32,8 +36,14 @@ public class MygroupTaskController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<?> createGroup(@RequestBody MyGroupDTO mygroup){
+    ResponseEntity<?> createGroup(@RequestBody MyGroupDTO mygroup){
         mygroupService.createGroup(mygroup);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/changeGroupInfo")
+    ResponseEntity<?> changeGroupInfo(@RequestBody MyGroupDTO myGroupDTO){
+        mygroupService.changeGroupInfo(myGroupDTO);
         return ResponseEntity.noContent().build();
     }
 }

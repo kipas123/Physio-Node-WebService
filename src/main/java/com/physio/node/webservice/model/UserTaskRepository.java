@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UserTaskRepository {
     List<User> findAll();
-    List<User> findByIduser(int id);
+    User findByIduser(int id);
     List<User> findByUserName(String username);
     User save(User entity);
 

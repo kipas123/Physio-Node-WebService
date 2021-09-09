@@ -17,10 +17,8 @@ public class UserService {
     }
 
     public UserDTO findUserByIdUser(int id){
-        return userTaskRepository.findByIduser(id)
-                .stream().
-                        map(UserDTO::new).
-                        collect(Collectors.toList()).get(0);
+        UserDTO userDTO = new UserDTO(userTaskRepository.findByIduser(id));
+        return userDTO;
     }
 
 

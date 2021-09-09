@@ -36,7 +36,7 @@ public class AilmentTaskController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/createAilmentNode")
+    @PostMapping("/createAilmentNote")
     public ResponseEntity<?> createAilmentNote(@RequestBody AilmentNoteDTO ailmentNoteDTO){
         ailmentService.createAilmentNote(ailmentNoteDTO);
         return ResponseEntity.noContent().build();

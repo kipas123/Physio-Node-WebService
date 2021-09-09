@@ -1,6 +1,7 @@
 package com.physio.node.webservice.model.JPA;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.physio.node.webservice.model.DTO.MyGroupDTO;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -30,7 +31,7 @@ public class Mygroup implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="founder_iduser")
 	@JsonBackReference
-	private User founder;
+	private User mygroupFounder;
 
 	//bi-directional many-to-many association to User
 	@ManyToMany(mappedBy="mygroups")
@@ -40,13 +41,19 @@ public class Mygroup implements Serializable {
 	public Mygroup() {
 	}
 
-	public Mygroup(String mygroupName, String mygroupDescription, User founder) {
+	public Mygroup(String mygroupName, String mygroupDescription, User mygroupFounder) {
 		this.mygroupName = mygroupName;
 		this.mygroupDescription = mygroupDescription;
-		this.founder = founder;
+		this.mygroupFounder = mygroupFounder;
 	}
 
-	public int getIdmygroup() {
+    public Mygroup(MyGroupDTO myGroupDTO) {
+		this.idmygroup = myGroupDTO.getIdMygroup();
+		this.mygroupName = myGroupDTO.getMygroupName();
+		this.mygroupDescription = myGroupDTO.getMygroupDescription();
+    }
+
+    public int getIdmygroup() {
 		return this.idmygroup;
 	}
 
@@ -70,12 +77,12 @@ public class Mygroup implements Serializable {
 		this.mygroupName = mygroupName;
 	}
 
-	public User getFounder() {
-		return founder;
+	public User getMygroupFounder() {
+		return mygroupFounder;
 	}
 
-	public void setFounder(User founder) {
-		this.founder = founder;
+	public void setMygroupFounder(User mygroupFounder) {
+		this.mygroupFounder = mygroupFounder;
 	}
 
 	public List<User> getUsers() {

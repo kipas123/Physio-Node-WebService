@@ -4,6 +4,7 @@ import com.physio.node.webservice.model.DTO.MyGroupDTO;
 import com.physio.node.webservice.model.JPA.Mygroup;
 import com.physio.node.webservice.model.JPA.User;
 import com.physio.node.webservice.model.MygroupTaskRepository;
+import com.physio.node.webservice.model.UserTaskRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class MygroupService {
     private MygroupTaskRepository mygroupTaskRepository;
+    private UserTaskRepository userTaskRepository;
 
     public MygroupService(MygroupTaskRepository mygroupTaskRepository) {
         this.mygroupTaskRepository = mygroupTaskRepository;
@@ -31,5 +33,20 @@ public class MygroupService {
         founder.setIduser(1);
         Mygroup createdMygroup = new Mygroup(mygroup.getMygroupName(), mygroup.getMygroupDescription(), founder);
         mygroupTaskRepository.save(createdMygroup);
+    }
+
+    public MyGroupDTO findGroupByGroupId(int id) {
+        Mygroup mygroup = mygroupTaskRepository.findByIdmygroup(id);
+        MyGroupDTO myGroupDTO = new MyGroupDTO(mygroup);
+        //User user = userTaskRepository.findByIduser(mygroup.getFounder().getIduser());
+        //String groupFounderName = user.getUserName();
+        //MyGroupDTO myGroupDTO = new MyGroupDTO(mygroup.getIdmygroup(), mygroup.getMygroupName(), mygroup.getMygroupDescription(), groupFounderName);
+        return myGroupDTO;
+    }
+    public void changeGroupInfo(MyGroupDTO myGroupDTO){
+        Mygroup mygroup = new Mygroup(myGroupDTO);
+        Mygroup findMyGroup = mygroupTaskRepository.findByIdmygroup(mygroup.getIdmygroup());
+        mygroup.setMygroupFounder(findMyGroup.getMygroupFounder());
+        mygroupTaskRepository.save(mygroup);
     }
 }
