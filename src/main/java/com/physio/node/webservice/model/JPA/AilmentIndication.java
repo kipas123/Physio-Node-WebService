@@ -1,6 +1,7 @@
 package com.physio.node.webservice.model.JPA;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Data;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.persistence.*;
  * The persistent class for the ailment_indication database table.
  * 
  */
+@Data
 @Entity
 @Table(name="ailment_indication")
 @NamedQuery(name="AilmentIndication.findAll", query="SELECT a FROM AilmentIndication a")
@@ -41,36 +43,5 @@ public class AilmentIndication implements Serializable {
 		this.ailment = ailment;
 	}
 
-	public int getIdailmentIndication() {
-		return this.idailmentIndication;
-	}
-
-	public void setIdailmentIndication(int idailmentIndication) {
-		this.idailmentIndication = idailmentIndication;
-	}
-
-	public String getIndicationDescription() {
-		return this.indicationDescription;
-	}
-
-	public void setIndicationDescription(String indicationDescription) {
-		this.indicationDescription = indicationDescription;
-	}
-
-	public String getIndicationHeader() {
-		return this.indicationHeader;
-	}
-
-	public void setIndicationHeader(String indicationHeader) {
-		this.indicationHeader = indicationHeader;
-	}
-
-	public Ailment getAilment() {
-		return this.ailment;
-	}
-
-	public void setAilment(Ailment ailment) {
-		this.ailment = ailment;
-	}
 
 }

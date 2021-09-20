@@ -42,50 +42,19 @@ public class UserRole implements Serializable {
 		this.roleName=userRoleDTO.getRoleName();
 	}
 
-	public int getIduserRole() {
-		return this.iduserRole;
-	}
 
-	public void setIduserRole(int iduserRole) {
-		this.iduserRole = iduserRole;
-	}
-
-	public int getRoleFrequency() {
-		return this.roleFrequency;
-	}
-
-	public void setRoleFrequency(int roleFrequency) {
-		this.roleFrequency = roleFrequency;
-	}
-
-	public String getRoleName() {
-		return this.roleName;
-	}
-
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
-
-	public List<User> getUsers() {
-		return this.users;
-	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
-
-	public User addUser(User user) {
-		getUsers().add(user);
-		user.setUserRole(this);
-
-		return user;
-	}
-
-	public User removeUser(User user) {
-		getUsers().remove(user);
-		user.setUserRole(null);
-
-		return user;
-	}
+//	public User addUser(User user) {
+//		getUsers().add(user);
+//		user.setUserRole(this);
+//
+//		return user;
+//	}
+//
+//	public User removeUser(User user) {
+//		getUsers().remove(user);
+//		user.setUserRole(null);
+//
+//		return user;
+//	}
 
 }

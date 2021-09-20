@@ -1,6 +1,7 @@
 package com.physio.node.webservice.model.JPA;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Data;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.persistence.*;
  * The persistent class for the ailment_filepath database table.
  * 
  */
+@Data
 @Entity
 @Table(name="ailment_filepath")
 @NamedQuery(name="AilmentFilepath.findAll", query="SELECT a FROM AilmentFilepath a")
@@ -31,28 +33,5 @@ public class AilmentFilepath implements Serializable {
 	public AilmentFilepath() {
 	}
 
-	public int getIdailmentFilepath() {
-		return this.idailmentFilepath;
-	}
-
-	public void setIdailmentFilepath(int idailmentFilepath) {
-		this.idailmentFilepath = idailmentFilepath;
-	}
-
-	public String getPath() {
-		return this.path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public Ailment getAilment() {
-		return this.ailment;
-	}
-
-	public void setAilment(Ailment ailment) {
-		this.ailment = ailment;
-	}
 
 }
