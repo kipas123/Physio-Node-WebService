@@ -114,14 +114,14 @@ CREATE TABLE `mygroup` (
   `idmygroup` int(11) NOT NULL,
   `mygroup_name` varchar(45) NOT NULL,
   `mygroup_description` varchar(45) NOT NULL,
-  `founder_iduser` int(11) NOT NULL
+  `mygroup_owner` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Zrzut danych tabeli `mygroup`
 --
 
-INSERT INTO `mygroup` (`idmygroup`, `mygroup_name`, `mygroup_description`, `founder_iduser`) VALUES
+INSERT INTO `mygroup` (`idmygroup`, `mygroup_name`, `mygroup_description`, `mygroup_owner`) VALUES
 (1, 'Test', 'Lorem Ipsum is simply dummy text of the print', 1),
 (2, 'Test2', 'Lorem Ipsum is simply dummy text of the print', 1),
 (26, 'Test Grupowani', 'Sadasdas', 1),
@@ -229,7 +229,7 @@ ALTER TABLE `ailment_note`
 --
 ALTER TABLE `mygroup`
   ADD PRIMARY KEY (`idmygroup`),
-  ADD KEY `fk_mygroup_user1_idx` (`founder_iduser`);
+  ADD KEY `fk_mygroup_user1_idx` (`mygroup_owner`);
 
 --
 -- Indeksy dla tabeli `user`
@@ -332,7 +332,7 @@ ALTER TABLE `ailment_note`
 -- Ograniczenia dla tabeli `mygroup`
 --
 ALTER TABLE `mygroup`
-  ADD CONSTRAINT `fk_mygroup_user1` FOREIGN KEY (`founder_iduser`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_mygroup_user1` FOREIGN KEY (`mygroup_owner`) REFERENCES `user` (`iduser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ograniczenia dla tabeli `user`

@@ -1,6 +1,8 @@
 package com.physio.node.webservice.model.JPA;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.physio.node.webservice.model.DTO.UserWriteModel;
+import lombok.Data;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -12,6 +14,7 @@ import java.util.List;
  * The persistent class for the user database table.
  * 
  */
+@Data
 @Entity
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
 public class User implements Serializable {
@@ -21,12 +24,17 @@ public class User implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int iduser;
 
+	@Column(name="user_email")
+	private String userEmail;
+
+	@Column(name="user_password")
+	private String userPassword;
+
+
 	@Temporal(TemporalType.DATE)
 	@Column(name="user_dob")
 	private Date userDob;
 
-	@Column(name="user_email")
-	private String userEmail;
 
 	@Column(name="user_name")
 	private String userName;
@@ -45,9 +53,9 @@ public class User implements Serializable {
 	private List<Ailment> attendingphysicianAilment;
 
 	//bi-directional many-to-one association to Mygroup
-	@OneToMany(mappedBy="mygroupFounder")
+	@OneToMany(mappedBy="mygroupOwner")
 	@JsonManagedReference
-	private List<Mygroup> mygroupFounder;
+	private List<Mygroup> mygroupOwner;
 
 	//bi-directional many-to-many association to Mygroup
 	@ManyToMany
@@ -69,122 +77,65 @@ public class User implements Serializable {
 	@JoinColumn(name="user_role_iduser_role")
 	private UserRole userRole;
 
+	@Transient
+	private String token;
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public User() {
 	}
-
-	public int getIduser() {
-		return this.iduser;
-	}
-
-	public void setIduser(int iduser) {
-		this.iduser = iduser;
-	}
-
-	public Date getUserDob() {
-		return this.userDob;
-	}
-
-	public void setUserDob(Date userDob) {
-		this.userDob = userDob;
-	}
-
-	public String getUserEmail() {
-		return this.userEmail;
-	}
-
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
-	}
-
-	public String getUserName() {
-		return this.userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getUserSurname() {
-		return this.userSurname;
-	}
-
-	public void setUserSurname(String userSurname) {
-		this.userSurname = userSurname;
-	}
-
-	List<Ailment> getUserAilment() {
-		return userAilment;
-	}
-
-	void setUserAilment(List<Ailment> userAilment) {
-		this.userAilment = userAilment;
-	}
-
-	List<Ailment> getAttendingphysicianAilment() {
-		return attendingphysicianAilment;
-	}
-
-	void setAttendingphysicianAilment(List<Ailment> attendingphysicianAilment) {
-		this.attendingphysicianAilment = attendingphysicianAilment;
-	}
-
-	public Ailment addUserAilment(Ailment userAilment) {
-		getUserAilment().add(userAilment);
-		userAilment.setUser(this);
-
-		return userAilment;
-	}
-
-	public Ailment removeAilments1(Ailment userAilment) {
-		getUserAilment().remove(userAilment);
-		userAilment.setUser(null);
-
-		return userAilment;
-	}
-
-	public Ailment addAttendingphysicianAilment(Ailment attendingphysicianAilment) {
-		getAttendingphysicianAilment().add(attendingphysicianAilment);
-		attendingphysicianAilment.setAttendingphysician(this);
-
-		return attendingphysicianAilment;
-	}
-
-	public Ailment removeAttendingphysicianAilment(Ailment attendingphysicianAilment) {
-		getAttendingphysicianAilment().remove(attendingphysicianAilment);
-		attendingphysicianAilment.setAttendingphysician(null);
-
-		return attendingphysicianAilment;
+	public User(UserWriteModel user) {
+		this.userName = user.getUserName();
+		this.userSurname = user.getUserSurname();
+		this.userEmail = user.getUserEmail();
+		this.userDob = user.getUserDob();
+		this.iduser=user.getUserId();
+		this.userPassword=user.getUserPassword();
 	}
 
 
-	public Mygroup addFounderMygroups(Mygroup mygroupFounder) {
-		getFounderMygroups().add(mygroupFounder);
-		mygroupFounder.setMygroupFounder(this);
 
-		return mygroupFounder;
-	}
+//	public Ailment removeAilments1(Ailment userAilment) {
+//		getUserAilment().remove(userAilment);
+//		userAilment.setUser(null);
+//
+//		return userAilment;
+//	}
+//
+//	public Ailment addAttendingphysicianAilment(Ailment attendingphysicianAilment) {
+//		getAttendingphysicianAilment().add(attendingphysicianAilment);
+//		attendingphysicianAilment.setAttendingphysician(this);
+//
+//		return attendingphysicianAilment;
+//	}
+//
+//	public Ailment removeAttendingphysicianAilment(Ailment attendingphysicianAilment) {
+//		getAttendingphysicianAilment().remove(attendingphysicianAilment);
+//		attendingphysicianAilment.setAttendingphysician(null);
+//
+//		return attendingphysicianAilment;
+//	}
 
-	public Mygroup removeFounderMygroups(Mygroup mygroupFounder) {
-		getFounderMygroups().remove(mygroupFounder);
-		mygroupFounder.setMygroupFounder(null);
 
-		return mygroupFounder;
-	}
+//	public Mygroup addFounderMygroups(Mygroup mygroupOwner) {
+//		getFounderMygroups().add(mygroupOwner);
+//		mygroupOwner.setMygroupOwner(this);
+//
+//		return mygroupOwner;
+//	}
+//
+//	public Mygroup removeFounderMygroups(Mygroup mygroupOwner) {
+//		getFounderMygroups().remove(mygroupOwner);
+//		mygroupOwner.setMygroupOwner(null);
+//
+//		return mygroupOwner;
+//	}
 
-	List<Mygroup> getFounderMygroups() {
-		return mygroupFounder;
-	}
-
-	void setFounderMygroups(List<Mygroup> founderMygroups) {
-		this.mygroupFounder = founderMygroups;
-	}
-
-	public UserRole getUserRole() {
-		return this.userRole;
-	}
-
-	public void setUserRole(UserRole userRole) {
-		this.userRole = userRole;
-	}
 
 }
