@@ -4,14 +4,14 @@ import com.physio.node.webservice.model.JPA.Mygroup;
 import lombok.Data;
 
 @Data
-public class MyGroupDTO {
+public class MyGroupReadModel {
 
     private int idMygroup;
     private String mygroupName;
     private String mygroupDescription;
     private String mygroupFounder;
 
-    public MyGroupDTO(int idMygroup, String mygroupName, String mygroupDescription, String mygroupFounder){
+    public MyGroupReadModel(int idMygroup, String mygroupName, String mygroupDescription, String mygroupFounder){
         this.idMygroup = idMygroup;
         this.mygroupName = mygroupName;
         this.mygroupDescription = mygroupDescription;
@@ -19,11 +19,11 @@ public class MyGroupDTO {
     }
 
 
-    public MyGroupDTO(Mygroup mygroup){
+    public MyGroupReadModel(Mygroup mygroup){
         this.idMygroup = mygroup.getIdmygroup();
         this.mygroupName = mygroup.getMygroupName();
         this.mygroupDescription = mygroup.getMygroupDescription();
-        this.mygroupFounder = mygroup.getMygroupFounder().getUserName() + " " +mygroup.getMygroupFounder().getUserSurname();
+        this.mygroupFounder = mygroup.getMygroupOwner().getUserName() + " " +mygroup.getMygroupOwner().getUserSurname();
     }
 
 }

@@ -8,5 +8,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface SqlMygroupTaskRepository extends MygroupTaskRepository,JpaRepository<Mygroup, Integer> {
-    Mygroup findByIdmygroup(int id );
 }

@@ -1,6 +1,7 @@
 package com.physio.node.webservice.model.JPA;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.physio.node.webservice.model.DTO.UserRoleDTO;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -34,6 +35,11 @@ public class UserRole implements Serializable {
 	private List<User> users;
 
 	public UserRole() {
+	}
+
+	public UserRole(UserRoleDTO userRoleDTO) {
+		this.iduserRole=userRoleDTO.getIduserRole();
+		this.roleName=userRoleDTO.getRoleName();
 	}
 
 	public int getIduserRole() {

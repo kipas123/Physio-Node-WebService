@@ -3,7 +3,6 @@ package com.physio.node.webservice.controller;
 import com.physio.node.webservice.model.DTO.AilmentDTO;
 import com.physio.node.webservice.model.DTO.AilmentIndicationDTO;
 import com.physio.node.webservice.model.DTO.AilmentNoteDTO;
-import com.physio.node.webservice.model.DTO.MyGroupDTO;
 import com.physio.node.webservice.service.AilmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

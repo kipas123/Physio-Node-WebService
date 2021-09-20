@@ -1,7 +1,7 @@
 package com.physio.node.webservice.model.JPA;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.physio.node.webservice.model.DTO.MyGroupDTO;
+import com.physio.node.webservice.model.DTO.MyGroupWriteModel;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -29,9 +29,9 @@ public class Mygroup implements Serializable {
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="founder_iduser")
+	@JoinColumn(name="mygroup_owner")
 	@JsonBackReference
-	private User mygroupFounder;
+	private User mygroupOwner;
 
 	//bi-directional many-to-many association to User
 	@ManyToMany(mappedBy="mygroups")
@@ -41,16 +41,19 @@ public class Mygroup implements Serializable {
 	public Mygroup() {
 	}
 
-	public Mygroup(String mygroupName, String mygroupDescription, User mygroupFounder) {
+	public Mygroup(String mygroupName, String mygroupDescription, User mygroupOwner) {
 		this.mygroupName = mygroupName;
 		this.mygroupDescription = mygroupDescription;
-		this.mygroupFounder = mygroupFounder;
+		this.mygroupOwner = mygroupOwner;
 	}
 
-    public Mygroup(MyGroupDTO myGroupDTO) {
-		this.idmygroup = myGroupDTO.getIdMygroup();
-		this.mygroupName = myGroupDTO.getMygroupName();
-		this.mygroupDescription = myGroupDTO.getMygroupDescription();
+    public Mygroup(MyGroupWriteModel myGroupWriteModel) {
+		this.idmygroup = myGroupWriteModel.getIdmygroup();
+		this.mygroupName = myGroupWriteModel.getMygroupName();
+		this.mygroupDescription = myGroupWriteModel.getMygroupDescription();
+		if(myGroupWriteModel.getMygroupOwner()!=null){
+			this.mygroupOwner = new User(myGroupWriteModel.getMygroupOwner());
+		}
     }
 
     public int getIdmygroup() {
@@ -77,12 +80,12 @@ public class Mygroup implements Serializable {
 		this.mygroupName = mygroupName;
 	}
 
-	public User getMygroupFounder() {
-		return mygroupFounder;
+	public User getMygroupOwner() {
+		return mygroupOwner;
 	}
 
-	public void setMygroupFounder(User mygroupFounder) {
-		this.mygroupFounder = mygroupFounder;
+	public void setMygroupOwner(User mygroupFounder) {
+		this.mygroupOwner = mygroupFounder;
 	}
 
 	public List<User> getUsers() {
