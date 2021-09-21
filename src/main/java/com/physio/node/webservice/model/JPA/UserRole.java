@@ -1,7 +1,8 @@
 package com.physio.node.webservice.model.JPA;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.physio.node.webservice.model.DTO.UserRoleDTO;
+import com.physio.node.webservice.model.DTO.User.UserRoleDTO;
+import lombok.Data;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.List;
  * The persistent class for the user_role database table.
  * 
  */
+@Data
 @Entity
 @Table(name="user_role")
 @NamedQuery(name="UserRole.findAll", query="SELECT u FROM UserRole u")

@@ -1,4 +1,4 @@
-package com.physio.node.webservice.model.DTO;
+package com.physio.node.webservice.model.DTO.User;
 
 import com.physio.node.webservice.model.JPA.UserRole;
 import lombok.Data;

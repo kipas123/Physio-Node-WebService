@@ -1,6 +1,6 @@
-package com.physio.node.webservice.model.DTO;
+package com.physio.node.webservice.model.DTO.Mygroup;
 
-import com.physio.node.webservice.model.JPA.Mygroup;
+import com.physio.node.webservice.model.DTO.User.UserWriteModel;
 import lombok.Data;
 
 @Data

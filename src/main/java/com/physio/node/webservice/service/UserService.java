@@ -1,7 +1,7 @@
 package com.physio.node.webservice.service;
 
-import com.physio.node.webservice.model.DTO.UserReadModel;
-import com.physio.node.webservice.model.DTO.UserWriteModel;
+import com.physio.node.webservice.model.DTO.User.UserReadModel;
+import com.physio.node.webservice.model.DTO.User.UserWriteModel;
 import com.physio.node.webservice.model.JPA.User;
 import com.physio.node.webservice.model.JPA.UserRole;
 import com.physio.node.webservice.model.UserRoleTaskRepository;

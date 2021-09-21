@@ -1,8 +1,9 @@
 package com.physio.node.webservice.controller;
 
-import com.physio.node.webservice.model.DTO.AilmentDTO;
-import com.physio.node.webservice.model.DTO.AilmentIndicationDTO;
-import com.physio.node.webservice.model.DTO.AilmentNoteDTO;
+import com.physio.node.webservice.model.DTO.Ailment.AilmentReadModel;
+import com.physio.node.webservice.model.DTO.Ailment.AilmentIndicationDTO;
+import com.physio.node.webservice.model.DTO.Ailment.AilmentNoteDTO;
+import com.physio.node.webservice.model.DTO.Ailment.AilmentWriteModel;
 import com.physio.node.webservice.service.AilmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,18 +21,19 @@ public class AilmentTaskController {
     }
 
     @GetMapping("/user/{id}")
-    List<AilmentDTO> getUserAilmentByIdUser(@PathVariable int id){
-        return ailmentService.findUserAilmentByIdUser(id);
+    List<AilmentReadModel> getAllUserAilmentByIdUser(@PathVariable int id){
+        return ailmentService.findAllUserAilmentByIdUser(id);
     }
+
     @GetMapping("/{id}")
-    AilmentDTO getAilmentByIdAilment(@PathVariable int id){
+    AilmentReadModel getAilmentByIdAilment(@PathVariable int id){
         return ailmentService.findAilmentByIdAilment(id);
     }
 
 
     @PostMapping("/create")
-    public ResponseEntity<?> createGroup(@RequestBody AilmentDTO ailmentDTO){
-        ailmentService.createAilment(ailmentDTO);
+    public ResponseEntity<?> createGroup(@RequestBody AilmentWriteModel ailmentWriteModel){
+        ailmentService.createAilment(ailmentWriteModel);
         return ResponseEntity.noContent().build();
     }
 

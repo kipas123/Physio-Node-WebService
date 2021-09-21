@@ -3,9 +3,10 @@ package com.physio.node.webservice.service;
 import com.physio.node.webservice.model.AilmentIndicationTaskRepository;
 import com.physio.node.webservice.model.AilmentNoteTaskRepository;
 import com.physio.node.webservice.model.AilmentTaskRepository;
-import com.physio.node.webservice.model.DTO.AilmentDTO;
-import com.physio.node.webservice.model.DTO.AilmentIndicationDTO;
-import com.physio.node.webservice.model.DTO.AilmentNoteDTO;
+import com.physio.node.webservice.model.DTO.Ailment.AilmentReadModel;
+import com.physio.node.webservice.model.DTO.Ailment.AilmentIndicationDTO;
+import com.physio.node.webservice.model.DTO.Ailment.AilmentNoteDTO;
+import com.physio.node.webservice.model.DTO.Ailment.AilmentWriteModel;
 import com.physio.node.webservice.model.JPA.Ailment;
 import com.physio.node.webservice.model.JPA.AilmentIndication;
 import com.physio.node.webservice.model.JPA.AilmentNote;
@@ -13,6 +14,7 @@ import com.physio.node.webservice.model.JPA.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,29 +28,29 @@ public class AilmentService {
         this.ailmentNoteTaskRepository = ailmentNoteTaskRepository;
         this.ailmentIndicationTaskRepository = ailmentIndicationTaskRepository;
     }
-    public List<AilmentDTO> findUserAilmentByIdUser(int id){  //by id
+    public List<AilmentReadModel> findAllUserAilmentByIdUser(int id){  //by id
         return ailmentTaskRepository.findAllByUserIduser(id)
                 .stream().
-                        map(AilmentDTO::new).
-                        collect(Collectors.toList());
+                        map(ailment ->
+                                new AilmentReadModel(ailment.getIdailment(), ailment.getAilmentName(), ailment.getAilmentDescription()))
+                             .collect(Collectors.toList());
     }
-    public AilmentDTO findAilmentByIdAilment(int id){  //by id
-        return ailmentTaskRepository.findAllByUserIduser(id)
-                .stream().
-                        map(AilmentDTO::new).
-                        collect(Collectors.toList()).get(0);
+    public AilmentReadModel findAilmentByIdAilment(int id){  //by id
+        Optional<Ailment> ailment = ailmentTaskRepository.findFirstByIdailment(id);
+        if(ailment.isEmpty()){
+            throw new NullPointerException("Brak choroby");
+        }
+        AilmentReadModel ailmentReadModel = new AilmentReadModel(ailment.get());
+        return ailmentReadModel;
     }
 
-    public void createAilment(AilmentDTO ailmentDTO){
-        //hardcoded
+    public void createAilment(AilmentWriteModel ailmentWriteModel){
         User userAilment = new User();
         User attendingphysician = new User();
-        userAilment.setIduser(2);
-        attendingphysician.setIduser(1);
-        //--------------------------------
+        userAilment.setIduser(ailmentWriteModel.getUser());
+        attendingphysician.setIduser(ailmentWriteModel.getAttendingphysician());
 
-
-        Ailment createdAilment = new Ailment(ailmentDTO.getAilmentName(), ailmentDTO.getAilmentDescription(), userAilment, attendingphysician);
+        Ailment createdAilment = new Ailment(ailmentWriteModel.getAilmentName(), ailmentWriteModel.getAilmentDescription(), userAilment, attendingphysician);
         ailmentTaskRepository.save(createdAilment);
     }
     public void createAilmentNote(AilmentNoteDTO ailmentNoteDTO){

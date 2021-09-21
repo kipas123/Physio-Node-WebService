@@ -1,7 +1,8 @@
 package com.physio.node.webservice.model.JPA;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.physio.node.webservice.model.DTO.MyGroupWriteModel;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.physio.node.webservice.model.DTO.Mygroup.MyGroupWriteModel;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -30,15 +31,15 @@ public class Mygroup implements Serializable {
 	private String mygroupName;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="mygroup_owner")
-	@JsonBackReference
+	@JsonManagedReference
 	private User mygroupOwner;
 
 	//bi-directional many-to-many association to User
-	@ManyToMany(mappedBy="mygroups")
+	@OneToMany(mappedBy="mygroup")
 	@JsonBackReference
-	private List<User> users;
+	private List<Mygroup_Users> userMygroups;
 
 	public Mygroup() {
 	}

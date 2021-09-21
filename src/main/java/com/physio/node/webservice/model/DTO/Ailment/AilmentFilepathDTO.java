@@ -1,4 +1,4 @@
-package com.physio.node.webservice.model.DTO;
+package com.physio.node.webservice.model.DTO.Ailment;
 
 import com.physio.node.webservice.model.JPA.AilmentFilepath;
 import lombok.Data;

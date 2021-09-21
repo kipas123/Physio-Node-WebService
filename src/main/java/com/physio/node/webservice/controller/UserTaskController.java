@@ -2,8 +2,8 @@ package com.physio.node.webservice.controller;
 
 import com.physio.node.webservice.adapter.SqlMygroupTaskRepository;
 import com.physio.node.webservice.jwt.JwtTokenProvider;
-import com.physio.node.webservice.model.DTO.UserReadModel;
-import com.physio.node.webservice.model.DTO.UserWriteModel;
+import com.physio.node.webservice.model.DTO.User.UserReadModel;
+import com.physio.node.webservice.model.DTO.User.UserWriteModel;
 import com.physio.node.webservice.model.MygroupTaskRepository;
 import com.physio.node.webservice.model.UserTaskRepository;
 import com.physio.node.webservice.service.UserService;

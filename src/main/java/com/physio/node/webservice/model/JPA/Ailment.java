@@ -30,13 +30,13 @@ public class Ailment implements Serializable {
 	private String ailmentName;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_iduser")
 	@JsonBackReference(value="user_iduser")
 	private User user;
 
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="attendingphysician_iduser")
 	@JsonBackReference(value="attendingphysician_iduser")
 	private User attendingphysician;

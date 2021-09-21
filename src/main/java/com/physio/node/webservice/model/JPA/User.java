@@ -1,7 +1,8 @@
 package com.physio.node.webservice.model.JPA;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.physio.node.webservice.model.DTO.UserWriteModel;
+import com.physio.node.webservice.model.DTO.User.UserWriteModel;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -54,22 +55,13 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Mygroup
 	@OneToMany(mappedBy="mygroupOwner")
-	@JsonManagedReference
+	@JsonBackReference
 	private List<Mygroup> mygroupOwner;
 
 	//bi-directional many-to-many association to Mygroup
-	@ManyToMany
+	@OneToMany(mappedBy="user")
 	@JsonManagedReference
-	@JoinTable(
-		name="user_mygroup"
-		, joinColumns={
-			@JoinColumn(name="user_iduser")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="mygroup_idmygroup")
-			}
-		)
-	private List<Mygroup> mygroups;
+	private List<Mygroup_Users> userMygroups;
 
 	//bi-directional many-to-one association to UserRole
 	@ManyToOne

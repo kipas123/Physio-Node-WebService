@@ -13,4 +13,5 @@ import java.util.Optional;
 @Repository
 public interface SqlUserTaskRepository extends UserTaskRepository, JpaRepository<User, Integer> {
 
+//    User findByIduser(int id User);
 }

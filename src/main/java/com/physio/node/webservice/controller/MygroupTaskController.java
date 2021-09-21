@@ -1,7 +1,8 @@
 package com.physio.node.webservice.controller;
 
-import com.physio.node.webservice.model.DTO.MyGroupReadModel;
-import com.physio.node.webservice.model.DTO.MyGroupWriteModel;
+import com.physio.node.webservice.model.DTO.Mygroup.MyGroupReadModel;
+import com.physio.node.webservice.model.DTO.Mygroup.MyGroupUserListDTO;
+import com.physio.node.webservice.model.DTO.Mygroup.MyGroupWriteModel;
 import com.physio.node.webservice.model.MygroupTaskRepository;
 import com.physio.node.webservice.service.MygroupService;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,12 @@ public class MygroupTaskController {
     }
     @GetMapping("/all/{id}")
     List<MyGroupReadModel> getAllGroupsByUserId(@PathVariable int id){
-        return mygroupService.findAllGroupsByUserId(id);
+        return mygroupService.findAllGroupsByUserOwner(id);
+    }
+
+    @GetMapping("/userList/{id}")
+    List<MyGroupUserListDTO> getAllUsersByMygroupId(@PathVariable int id){
+        return mygroupService.findAllUsersByMygroupId(id);
     }
 
     @GetMapping("/{id}")

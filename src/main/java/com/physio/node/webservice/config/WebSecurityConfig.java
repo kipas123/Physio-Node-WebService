@@ -42,9 +42,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //These are public pages.
                 .antMatchers("/user/**",
-      "/error").permitAll()
+      "/error","/test","/group/userList/{id}","/group/**", "/ailment/**").permitAll()
                 //These can be reachable for just have admin role.
-                .antMatchers("/group/**", "/ailment/**").hasRole("admin")
+                .antMatchers("/ss").hasRole("admin")
                 //all remaining paths should need authentication.
                 .anyRequest().fullyAuthenticated()
                 .and()
