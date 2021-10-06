@@ -18,8 +18,8 @@ public class AilmentNoteDTO {
         this.noteHeader = ailmentNote.getNoteHeader();
     }
     AilmentNoteDTO(String noteHeader,String noteDescription, int ailmentId){
+        this.ailmentId = ailmentId;
         this.noteHeader = noteHeader;
         this.noteDescription = noteDescription;
-        this.ailmentId = ailmentId;
     }
 }

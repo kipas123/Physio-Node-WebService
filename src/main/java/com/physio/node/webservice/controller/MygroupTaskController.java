@@ -20,33 +20,48 @@ public class MygroupTaskController {
         this.mygroupService = mygroupService;
         this.mygroupTaskRepository = mygroupTaskRepository;
     }
+
+        /*
+    Availability: admin
+    **/
     @GetMapping("/all/{id}")
     List<MyGroupReadModel> getAllGroupsByUserId(@PathVariable int id){
         return mygroupService.findAllGroupsByUserOwner(id);
     }
-
+    /*
+    Availability: admin, physiotherapist, coach
+    **/
     @GetMapping("/userList/{id}")
     List<MyGroupUserListDTO> getAllUsersByMygroupId(@PathVariable int id){
         return mygroupService.findAllUsersByMygroupId(id);
     }
-
+    /*
+    Availability: admin, physiotherapist, coach
+    **/
     @GetMapping("/{id}")
     MyGroupReadModel getGroupByGroupId(@PathVariable int id){
         return mygroupService.findGroupByGroupId(id);
     }
 
+    /*
+    Availability: coach
+    **/
     @GetMapping("/all")
     List<MyGroupReadModel> getAllGroups(){
         return mygroupService.findAllGroups();
     }
 
-
+    /*
+    Availability: admin, physiotherapist
+    **/
     @PostMapping("/create")
     ResponseEntity<?> createGroup(@RequestBody MyGroupWriteModel mygroup){
         mygroupService.createGroup(mygroup);
         return ResponseEntity.noContent().build();
     }
-
+    /*
+    Availability: admin, physiotherapist
+    **/
     @PutMapping("/changeGroupInfo")
     ResponseEntity<?> changeGroupInfo(@RequestBody MyGroupWriteModel myGroupWriteModel){
         mygroupService.changeGroupInfo(myGroupWriteModel);

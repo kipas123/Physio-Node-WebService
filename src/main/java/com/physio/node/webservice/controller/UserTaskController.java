@@ -34,7 +34,9 @@ public class UserTaskController {
         this.userTaskRepository = userTaskRepository;
     }
 
-
+    /*
+    Availability: admin, physiotherapist, coach
+    **/
     @GetMapping("/{id}")
     UserReadModel getUserByIdUser(@PathVariable int id){
         return userService.findUserByIdUser(id);
@@ -45,12 +47,17 @@ public class UserTaskController {
         return ResponseEntity.noContent().build();
     }
 
-
+        /*
+        Availability: permitAll
+        **/
     @PostMapping("/registration")
     public ResponseEntity<?> register(@RequestBody UserWriteModel user){
         return userService.registerUser(user);
     }
-//
+
+        /*
+        Availability: permitAll
+        **/
     @GetMapping("/login")
     public ResponseEntity<?> login(Principal principal){
         System.out.println("wchodze");

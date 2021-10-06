@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -41,12 +41,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .authorizeRequests()
                 //These are public pages.
-                .antMatchers("/user/**",
-      "/error","/test","/group/userList/{id}","/group/**", "/ailment/**").permitAll()
+                .antMatchers("/user/login",
+                        "/user/registration",
+                        "/error")
+                .permitAll()
+                .antMatchers("/ailment/user/{id}",
+                        "/ailment/{id}",
+                        "/error")
+                .hasAnyRole("admin","user")
                 //These can be reachable for just have admin role.
-                .antMatchers("/ss").hasRole("admin")
+//                .antMatchers("/group/all/{id}",
+//                        "/group/{id}",
+//                        "/group/userList/{id}",
+//                        "/user/{id}").hasRole("admin")
                 //all remaining paths should need authentication.
-                .anyRequest().fullyAuthenticated()
+                .anyRequest().hasRole("admin")
                 .and()
                 //logout will log the user out by invalidate session.
                 .logout().permitAll()
@@ -67,7 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     //Cross origin resource sharing.
     @Bean
-    public WebMvcConfigurer corsConfigurer(){
+    public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
