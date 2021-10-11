@@ -43,6 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //These are public pages.
                 .antMatchers("/user/login",
                         "/user/registration",
+                        "/user/roleManagement/**",
                         "/error")
                 .permitAll()
                 .antMatchers("/ailment/user/{id}",

@@ -12,5 +12,6 @@ public interface UserTaskRepository {
     List<User> findByUserName(String username);
     User save(User entity);
   Optional<User> findByUserEmail(String email);
+    List<User> findAllByUserNameOrUserSurname(String value);
 
 }

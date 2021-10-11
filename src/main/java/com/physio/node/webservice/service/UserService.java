@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -35,6 +37,12 @@ public class UserService {
        UserReadModel userReadModel = new UserReadModel(userTaskRepository.findByUserEmail(userEmail).get());
         return userReadModel;
     }
+    public List<UserReadModel> findUserByEmailOrNameOrSurname(String value){
+        return userTaskRepository.findAllByUserNameOrUserSurname(value)
+                .stream()
+                .map(UserReadModel::new).collect(Collectors.toList());
+    }
+
     public void saveUser(UserWriteModel user){
         User createdUser = new User(user);
 
@@ -55,6 +63,10 @@ public class UserService {
     }
 
 
-
-
+    public void changeUserRole(int userId, int roleId) {
+        User user = userTaskRepository.findByIduser(userId);
+        UserRole userRole = userRoleTaskRepository.findByIduserRole(roleId);
+        user.setUserRole(userRole);
+        userTaskRepository.save(user);
+    }
 }

@@ -9,12 +9,14 @@ import com.physio.node.webservice.model.UserTaskRepository;
 import com.physio.node.webservice.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/user")
@@ -69,6 +71,17 @@ public class UserTaskController {
         UserReadModel userReadModel = userService.findUserByUserEmail(authenticationToken.getName());
         userReadModel.setToken(jwtTokenProvider.generateToken(authenticationToken));
         return new ResponseEntity<>(userReadModel, HttpStatus.OK);
+    }
+
+    @GetMapping("/roleManagement/foundUser/{value}")
+    public List<UserReadModel> getUserByEmailOrNameOrSurname(@PathVariable String value){
+        System.out.println("Dzien dobry" + value);
+        return userService.findUserByEmailOrNameOrSurname(value);
+    }
+    @GetMapping("/roleManagement/changeRole/{userId}/{roleId}")
+    public ResponseEntity<?> getUserByEmailOrNameOrSurname(@PathVariable int userId, @PathVariable int roleId){
+        userService.changeUserRole(userId, roleId);
+        return ResponseEntity.noContent().build();
     }
 
 //    @GetMapping("/testjpa")

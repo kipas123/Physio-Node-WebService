@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface SqlUserTaskRepository extends UserTaskRepository, JpaRepository<User, Integer> {
-
+      @Query("SELECT u FROM User u WHERE u.userEmail=:value OR u.userName=:value OR u.userSurname=:value")
+      List<User> findAllByUserNameOrUserSurname(@Param("value") String value);
 //    User findByIduser(int id User);
 }
