@@ -6,6 +6,7 @@ import com.physio.node.webservice.model.JPA.User;
 import com.physio.node.webservice.model.JPA.UserRole;
 import com.physio.node.webservice.model.UserRoleTaskRepository;
 import com.physio.node.webservice.model.UserTaskRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,6 +44,37 @@ public class UserService {
                 .map(UserReadModel::new).collect(Collectors.toList());
     }
 
+
+    public List<UserReadModel> findUnverifiedUser(int page, int size){
+        List <UserReadModel> userList = userTaskRepository.findAllByUserRole_RoleName("unverified", PageRequest.of(page,size))
+                .stream()
+                .map(UserReadModel::new)
+                .collect(Collectors.toList());
+        if(userList.size()==0) userList=null;
+        return userList;
+    }
+
+    public List<UserReadModel> findUsersWithModRole(){
+        List <UserReadModel> userList = userTaskRepository.findAllUserWithModRole()
+                .stream()
+                .map(UserReadModel::new)
+                .collect(Collectors.toList());
+        if(userList==null) return null;
+        return userList;
+    }
+
+
+
+    public List<UserReadModel> findUnverifiedUserByUserNameOrUserSurname(String value){
+        List <UserReadModel> userList = userTaskRepository.findAllUnverifiedUserByUserNameOrUserSurname(value)
+                .stream()
+                .map(UserReadModel::new)
+                .collect(Collectors.toList());
+        if(userList==null) return null;
+        return userList;
+    }
+
+
     public void saveUser(UserWriteModel user){
         User createdUser = new User(user);
 
@@ -54,7 +86,7 @@ public class UserService {
             System.out.println(userWriteModel.getUserEmail());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        UserRole userRole = userRoleTaskRepository.findByRoleName("user");
+        UserRole userRole = userRoleTaskRepository.findByRoleName("unverified");
         userWriteModel.setUserPassword(passwordEncoder.encode(userWriteModel.getUserPassword()));
         User createdUser = new User(userWriteModel);
         createdUser.setUserRole(userRole);
@@ -68,5 +100,11 @@ public class UserService {
         UserRole userRole = userRoleTaskRepository.findByIduserRole(roleId);
         user.setUserRole(userRole);
         userTaskRepository.save(user);
+    }
+
+
+
+    public Long countUnverifedUser(){
+        return userTaskRepository.countUnverifiedUser();
     }
 }
