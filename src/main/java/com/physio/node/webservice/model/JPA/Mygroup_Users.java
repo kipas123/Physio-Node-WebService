@@ -36,5 +36,12 @@ public class Mygroup_Users implements Serializable {
 
     public Mygroup_Users() {
     }
+    public Mygroup_Users(Mygroup_UsersPK mygroup_usersPK, Mygroup mygroup, User user) {
+        this.setId(mygroup_usersPK);
+        this.setMygroup(mygroup);
+        this.setUser(user);
+
+        this.mygroup = mygroup;
+    }
 
 }

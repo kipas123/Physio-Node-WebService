@@ -20,6 +20,11 @@ public class Mygroup_UsersPK implements Serializable {
     public Mygroup_UsersPK() {
     }
 
+    public Mygroup_UsersPK(int userIduser, int mygroupIdmygroup) {
+        this.setUserIduser( userIduser);
+        this.setMygroupIdmygroup(mygroupIdmygroup);
+    }
+
 
     public boolean equals(Object other) {
         if (this == other) {

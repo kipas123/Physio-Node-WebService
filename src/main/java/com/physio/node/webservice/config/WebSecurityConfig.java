@@ -48,7 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/error","/test")
                 .permitAll()
                 .antMatchers("/ailment/user/{id}",
-                        "/ailment/{id}",
+                        "/ailment/{id}","/group/addUserToGroup/{userId}/{groupId}",
+                        "/group/removeUserFromGroup/{userId}/{groupId}",
                         "/error")
                 .hasAnyRole("admin","user")
                 //These can be reachable for just have admin role.

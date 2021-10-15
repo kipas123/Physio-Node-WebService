@@ -4,20 +4,28 @@ import com.physio.node.webservice.model.DTO.Mygroup.MyGroupReadModel;
 import com.physio.node.webservice.model.DTO.Mygroup.MyGroupUserListDTO;
 import com.physio.node.webservice.model.DTO.Mygroup.MyGroupWriteModel;
 import com.physio.node.webservice.model.JPA.Mygroup;
+import com.physio.node.webservice.model.JPA.Mygroup_Users;
+import com.physio.node.webservice.model.JPA.Mygroup_UsersPK;
 import com.physio.node.webservice.model.JPA.User;
 import com.physio.node.webservice.model.MygroupTaskRepository;
+import com.physio.node.webservice.model.Mygroup_UsersTaskRepository;
 import com.physio.node.webservice.model.UserTaskRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class MygroupService {
     private MygroupTaskRepository mygroupTaskRepository;
     private UserTaskRepository userTaskRepository;
+    private Mygroup_UsersTaskRepository mygroup_usersTaskRepository;
 
-    public MygroupService(MygroupTaskRepository mygroupTaskRepository) {
+    public MygroupService(MygroupTaskRepository mygroupTaskRepository, UserTaskRepository userTaskRepository, Mygroup_UsersTaskRepository mygroup_usersTaskRepository) {
         this.mygroupTaskRepository = mygroupTaskRepository;
+        this.userTaskRepository = userTaskRepository;
+        this.mygroup_usersTaskRepository = mygroup_usersTaskRepository;
     }
 
     public List<MyGroupReadModel> findAllGroupsByUserOwner(int id){
@@ -60,5 +68,24 @@ public class MygroupService {
                         stream().
                         map(userMyGroup -> new MyGroupUserListDTO(userMyGroup.getUser())).collect(Collectors.toList());
         return userList;
+    }
+
+    public ResponseEntity<?> addUserToGroup(int userId, int mygroupId){
+        Mygroup mygroup = mygroupTaskRepository.findByIdmygroup(mygroupId);
+        User user = userTaskRepository.findByIduser(userId);
+        if(mygroup == null || user == null) return ResponseEntity.badRequest().build();
+        if(mygroup_usersTaskRepository.findAllByUser_IduserAndMygroup_Idmygroup(userId, mygroupId).size()!=0) return ResponseEntity.badRequest().build();
+        Mygroup_UsersPK mygroup_usersPK = new Mygroup_UsersPK(userId, mygroupId);
+        Mygroup_Users mygroup_users = new Mygroup_Users(mygroup_usersPK, mygroup, user);
+        mygroup_usersTaskRepository.save(mygroup_users);
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<?> removeUserFromGroup(int userId, int mygroupId){
+        Optional<Mygroup_Users> mygroup_users  = mygroup_usersTaskRepository
+                .findByUserIduserAndMygroupIdmygroup(userId,mygroupId);
+        if(mygroup_users.isEmpty()) return ResponseEntity.badRequest().build();
+        mygroup_usersTaskRepository.delete(mygroup_users.get());
+        return ResponseEntity.ok().build();
     }
 }

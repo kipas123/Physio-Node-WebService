@@ -67,4 +67,14 @@ public class MygroupTaskController {
         mygroupService.changeGroupInfo(myGroupWriteModel);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/addUserToGroup/{userId}/{groupId}")
+    ResponseEntity<?> addUserToGroup(@PathVariable int userId, @PathVariable int groupId){
+        return mygroupService.addUserToGroup(userId, groupId);
+    }
+
+    @GetMapping("/removeUserFromGroup/{userId}/{groupId}")
+    ResponseEntity<?> removeUserFromGroup(@PathVariable int userId, @PathVariable int groupId){
+        return mygroupService.removeUserFromGroup(userId, groupId);
+    }
 }
