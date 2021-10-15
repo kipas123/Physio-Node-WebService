@@ -45,7 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/registration",
                         "/user/roleManagement/**",
                         "/user/{id}",
-                        "/error","/test")
+                        "/error","/test",
+                        "/group/all/{id}")
                 .permitAll()
                 .antMatchers("/ailment/user/{id}",
                         "/ailment/{id}","/group/addUserToGroup/{userId}/{groupId}",

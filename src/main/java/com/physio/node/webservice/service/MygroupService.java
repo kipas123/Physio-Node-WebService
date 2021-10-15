@@ -35,6 +35,15 @@ public class MygroupService {
                 .stream().map(MyGroupReadModel::new).collect(Collectors.toList());
     }
 
+    public List<MyGroupReadModel> findAllGroupsByUserId(int id){
+        User user = userTaskRepository.findByIduser(id);
+        List<MyGroupReadModel> usersGroups = user.getUserMygroups().stream().map(
+                Mygroup_Users-> new MyGroupReadModel(Mygroup_Users.getMygroup())
+        ).collect(Collectors.toList());
+        return usersGroups;
+    }
+
+
     public List<MyGroupReadModel> findAllGroups(){
         return mygroupTaskRepository.findAll()
                 .stream().map(MyGroupReadModel::new).collect(Collectors.toList());

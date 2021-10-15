@@ -5,6 +5,7 @@ import com.physio.node.webservice.model.DTO.Mygroup.MyGroupUserListDTO;
 import com.physio.node.webservice.model.DTO.Mygroup.MyGroupWriteModel;
 import com.physio.node.webservice.model.MygroupTaskRepository;
 import com.physio.node.webservice.service.MygroupService;
+import com.physio.node.webservice.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +14,12 @@ import java.util.List;
 @RequestMapping("/group")
 @RestController
 public class MygroupTaskController {
+    private UserService userService;
     private MygroupService mygroupService;
     private MygroupTaskRepository mygroupTaskRepository;
 
-    public MygroupTaskController(MygroupService mygroupService, MygroupTaskRepository mygroupTaskRepository) {
+    public MygroupTaskController(UserService userService, MygroupService mygroupService, MygroupTaskRepository mygroupTaskRepository) {
+        this.userService = userService;
         this.mygroupService = mygroupService;
         this.mygroupTaskRepository = mygroupTaskRepository;
     }
@@ -25,7 +28,7 @@ public class MygroupTaskController {
     Availability: admin
     **/
     @GetMapping("/all/{id}")
-    List<MyGroupReadModel> getAllGroupsByUserId(@PathVariable int id){
+    List<MyGroupReadModel> getAllGroupsByUserOwner(@PathVariable int id){
         return mygroupService.findAllGroupsByUserOwner(id);
     }
     /*
@@ -35,6 +38,13 @@ public class MygroupTaskController {
     List<MyGroupUserListDTO> getAllUsersByMygroupId(@PathVariable int id){
         return mygroupService.findAllUsersByMygroupId(id);
     }
+
+    @GetMapping("/all/user/{id}")
+    List<MyGroupReadModel> getAllGroupByUserId(@PathVariable int id){
+        return mygroupService.findAllGroupsByUserId(id);
+    }
+
+
     /*
     Availability: admin, physiotherapist, coach
     **/

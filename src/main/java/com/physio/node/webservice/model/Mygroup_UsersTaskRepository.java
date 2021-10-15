@@ -12,4 +12,6 @@ public interface Mygroup_UsersTaskRepository {
     List<Mygroup_Users> findAllByUser_IduserAndMygroup_Idmygroup(int userId, int mygroupId);
     void delete(Mygroup_Users mygroup_users);
     Optional<Mygroup_Users> findByUserIduserAndMygroupIdmygroup(int idUser, int groupId);
+    List<Mygroup_Users> findAllByUser_Iduser(int userId);
+
 }

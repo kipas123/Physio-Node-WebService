@@ -10,5 +10,4 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SqlMygroup_UsersTaskRepository extends Mygroup_UsersTaskRepository, JpaRepository<Mygroup_Users, Mygroup_UsersPK> {
-
 }
