@@ -69,6 +69,10 @@ public class User implements Serializable {
 	@JoinColumn(name="user_role_iduser_role")
 	private UserRole userRole;
 
+	@OneToMany
+	@JsonManagedReference
+	private List<Message> message;
+
 	@Transient
 	private String token;
 
@@ -89,6 +93,9 @@ public class User implements Serializable {
 		this.userDob = user.getUserDob();
 		this.iduser=user.getUserId();
 		this.userPassword=user.getUserPassword();
+	}
+	public User(int iduser){
+		this.iduser = iduser;
 	}
 
 
