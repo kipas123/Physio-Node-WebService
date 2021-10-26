@@ -42,6 +42,8 @@ public class User implements Serializable {
 
 	@Column(name="user_surname")
 	private String userSurname;
+	@Column(name="reset_password_token")
+	private String resetPasswordToken;
 
 	//bi-directional many-to-one association to Ailment
 	@OneToMany(mappedBy="user")

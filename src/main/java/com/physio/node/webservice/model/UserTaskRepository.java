@@ -20,5 +20,6 @@ public interface UserTaskRepository {
     List<User> findAllByUserRole_RoleName(String roleName);
     Long countUnverifiedUser();
     List<User> findAllUserWithModRole();
+    Optional<User> findByResetPasswordToken(String resetPasswordToken);
 
 }

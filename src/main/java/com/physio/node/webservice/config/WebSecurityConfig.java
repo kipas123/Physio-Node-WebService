@@ -45,9 +45,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/registration",
                         "/user/roleManagement/**",
                         "/user/{id}",
+                        "/user/passwordTokenCheck/{token}",
+                        "/user/passwordTokenGenerate/{email}",
                         "/error","/test",
+                        "/test/**",
                         "/group/all/{id}",
-                        "/message/**")
+                        "/message/**",
+                        "/auth/**")
                 .permitAll()
                 .antMatchers("/ailment/user/{id}",
                         "/ailment/{id}","/group/addUserToGroup/{userId}/{groupId}",

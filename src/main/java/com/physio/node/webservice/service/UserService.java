@@ -34,9 +34,16 @@ public class UserService {
         return userReadModel;
     }
 
+
     public UserReadModel findUserByUserEmail(String userEmail){
        UserReadModel userReadModel = new UserReadModel(userTaskRepository.findByUserEmail(userEmail).get());
         return userReadModel;
+    }
+
+    public Boolean findUserByUserPasswordResetToken(String token){
+        UserReadModel userReadModel = new UserReadModel(userTaskRepository.findByResetPasswordToken(token).get());
+        if(userReadModel==null) return false;
+        return true;
     }
     public List<UserReadModel> findUserByEmailOrNameOrSurname(String value){
         return userTaskRepository.findAllByUserNameOrUserSurname(value)
@@ -80,19 +87,6 @@ public class UserService {
 
     }
 
-    public ResponseEntity<?> registerUser(UserWriteModel userWriteModel){
-        Optional<User> user = userTaskRepository.findByUserEmail(userWriteModel.getUserEmail());
-        if(!user.isEmpty()){
-            System.out.println(userWriteModel.getUserEmail());
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-        UserRole userRole = userRoleTaskRepository.findByRoleName("unverified");
-        userWriteModel.setUserPassword(passwordEncoder.encode(userWriteModel.getUserPassword()));
-        User createdUser = new User(userWriteModel);
-        createdUser.setUserRole(userRole);
-
-        return new ResponseEntity<>(userTaskRepository.save(createdUser), HttpStatus.CREATED);
-    }
 
 
     public void changeUserRole(int userId, int roleId) {
@@ -101,6 +95,7 @@ public class UserService {
         user.setUserRole(userRole);
         userTaskRepository.save(user);
     }
+
 
 
 
