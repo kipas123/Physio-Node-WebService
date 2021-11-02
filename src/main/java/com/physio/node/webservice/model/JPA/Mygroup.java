@@ -24,7 +24,7 @@ public class Mygroup implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idmygroup;
 
-	@Column(name="mygroup_description")
+	@Column(name = "mygroup_description", columnDefinition = "MEDIUMTEXT")
 	private String mygroupDescription;
 
 	@Column(name="mygroup_name")

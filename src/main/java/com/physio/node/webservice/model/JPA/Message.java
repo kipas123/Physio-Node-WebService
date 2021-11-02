@@ -19,7 +19,7 @@ public class Message {
     @Column(name = "idmessage")
     private int idmessage;
 
-    @Column(name = "message_text")
+    @Column(name = "message_text", columnDefinition = "MEDIUMTEXT")
     private String messageText;
 
     @Column(name = "post_date")
