@@ -23,7 +23,7 @@ public class Ailment implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idailment;
 
-	@Column(name="ailment_description")
+	@Column(name = "ailment_description", columnDefinition = "LONGTEXT")
 	private String ailmentDescription;
 
 	@Column(name="ailment_name")
@@ -43,8 +43,8 @@ public class Ailment implements Serializable {
 
 	//bi-directional many-to-one association to AilmentFilepath
 	@OneToMany(mappedBy="ailment")
-	@JsonManagedReference(value="ailmentFilepaths")
-	private List<AilmentFilepath> ailmentFilepaths;
+	@JsonManagedReference(value="ailmentFiles")
+	private List<AilmentFiles> ailmentFiles;
 
 	//bi-directional many-to-one association to AilmentIndication
 	@OneToMany(mappedBy="ailment")
@@ -56,7 +56,7 @@ public class Ailment implements Serializable {
 	@JsonManagedReference(value="ailmentNotes")
 	private List<AilmentNote> ailmentNotes;
 
-	@OneToMany
+	@OneToMany(mappedBy = "ailment")
 	@JsonManagedReference
 	private List<Message> message;
 

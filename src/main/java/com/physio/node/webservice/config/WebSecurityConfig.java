@@ -51,7 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/test/**",
                         "/group/all/{id}",
                         "/message/**",
-                        "/auth/**")
+                        "/auth/**",
+                        "/fileSystem/**")
                 .permitAll()
                 .antMatchers("/ailment/user/{id}",
                         "/ailment/{id}","/group/addUserToGroup/{userId}/{groupId}",

@@ -29,7 +29,7 @@ public class AilmentReadModel {
         this.ailmentName = ailment.getAilmentName();
         this.ailmentNotes = ailment.getAilmentNotes().stream().map(AilmentNoteDTO::new).collect(Collectors.toList());
         this.ailmentIndications = ailment.getAilmentIndications().stream().map(AilmentIndicationDTO::new).collect(Collectors.toList());
-        this.ailmentFilepaths = ailment.getAilmentFilepaths().stream().map(AilmentFilepathDTO::new).collect(Collectors.toList());
+        //this.ailmentFilepaths = ailment.getAilmentFiles().stream().map(AilmentFilepathDTO::new).collect(Collectors.toList());
         this.attendingphysician = ailment.getAttendingphysician().getUserName() + " " + ailment.getAttendingphysician().getUserSurname();
     }
 }

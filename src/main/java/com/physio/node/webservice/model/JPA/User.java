@@ -71,9 +71,13 @@ public class User implements Serializable {
 	@JoinColumn(name="user_role_iduser_role")
 	private UserRole userRole;
 
-	@OneToMany
+	@OneToMany(mappedBy = "user")
 	@JsonManagedReference
 	private List<Message> message;
+
+	@OneToMany(mappedBy = "user")
+	@JsonManagedReference
+	private List<AilmentFiles> ailmentFiles;
 
 	@Transient
 	private String token;

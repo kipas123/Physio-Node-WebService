@@ -1,0 +1,2 @@
+ALTER TABLE ailment_files
+    MODIFY COLUMN data LONGBLOB;
