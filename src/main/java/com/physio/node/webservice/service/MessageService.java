@@ -28,7 +28,8 @@ public class MessageService {
                 .collect(Collectors.toList());
     }
 
-    public ResponseEntity<?> sendMessage(MessageWriteModel messageWriteModel){
+    public ResponseEntity<?>
+    sendMessage(MessageWriteModel messageWriteModel){
         Message message = new Message(messageWriteModel);
         message.setPostDate(new Date());
         Message message1 = messageTaskRepository.save(message);

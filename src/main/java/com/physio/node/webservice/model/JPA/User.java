@@ -3,6 +3,9 @@ package com.physio.node.webservice.model.JPA;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.physio.node.webservice.model.DTO.User.UserWriteModel;
+import com.physio.node.webservice.model.JPA.VisitSystem.VisitSystemUserServiceType;
+import com.physio.node.webservice.model.JPA.VisitSystem.VisitSystemUserVisit;
+import com.physio.node.webservice.model.JPA.VisitSystem.VisitSystemUserWorkDay;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -78,6 +81,18 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "user")
 	@JsonManagedReference
 	private List<AilmentFiles> ailmentFiles;
+	//bi-directional many-to-one association to Ailment
+	@OneToMany(mappedBy="user")
+	@JsonManagedReference(value="user_iduser")
+	private List<VisitSystemUserWorkDay> visitSystem_userWorkDays;
+
+	@OneToMany(mappedBy="userOwner")
+	@JsonManagedReference(value="user_iduser")
+	private List<VisitSystemUserServiceType> visitSystemUserServiceTypes;
+
+	@OneToMany(mappedBy="user")
+	@JsonManagedReference
+	private List<VisitSystemUserVisit> visitSystemUserVisits;
 
 	@Transient
 	private String token;
