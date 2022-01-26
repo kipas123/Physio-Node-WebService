@@ -53,6 +53,12 @@ public class User implements Serializable {
 	@JsonManagedReference(value="user_iduser")
 	private List<Ailment> userAilment;
 
+	@OneToMany(mappedBy = "user")
+	private List<ExerciseBook> exerciseBooks;
+
+	@OneToMany(mappedBy = "attendingcoach")
+	private List<ExerciseBook> exerciseBookOfAttendingCoach;
+
 	//bi-directional many-to-one association to Ailment
 	@OneToMany(mappedBy="attendingphysician")
 	@JsonManagedReference(value="attendingphysician_iduser")
@@ -93,6 +99,10 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user")
 	@JsonManagedReference
 	private List<VisitSystemUserVisit> visitSystemUserVisits;
+
+	@ManyToMany(mappedBy = "membership")
+	List<MessageRoom> messageRooms;
+
 
 	@Transient
 	private String token;

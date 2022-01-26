@@ -9,6 +9,5 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface SqlMessageTaskRepository extends MessageTaskRepository,JpaRepository<Message, Integer> {
-    @Query("SELECT COUNT(u) FROM Message u WHERE u.ailment.idailment=:idailment")
-    Long countMessageByAilmentId(@Param("idailment") int idailment);
+
 }

@@ -106,14 +106,14 @@ public class UserWorkService {
                 visitSystemUserWorkHour -> {
                     long elapsedMinutes = Duration.between(visitSystemUserWorkHour.getUserWorkHour_beginningTime(), visitSystemUserWorkHour.getUserWorkHour_endingTime()).toMinutes();
 
-                    for (int k = 0; k <= elapsedMinutes; k += 60) {
+                    for (int k = 0; k <= elapsedMinutes; k += 15) {
                         LocalTime localTime = visitSystemUserWorkHour.getUserWorkHour_beginningTime().plusMinutes(k);
 //                        if(Duration.between(localTime, visitSystemUserWorkHour.getUserWorkHour_endingTime()).toMinutes() < durationShortestUserServiceType ){
 //                            continue;
 //                        }
 
-                        if (elapsedMinutes == k+(elapsedMinutes%60)) {
-                            localTime = localTime.plusMinutes(elapsedMinutes%60);
+                        if (elapsedMinutes == k) {
+                            localTime = localTime.plusMinutes(elapsedMinutes%15);
                             listOfHours.add(new WorkHourListOfAvailableHourDTO(localTime, false));
                         } else  {
                             listOfHours.add(new WorkHourListOfAvailableHourDTO(localTime, true));
@@ -134,7 +134,7 @@ public class UserWorkService {
                     long duration = hour * 60 + minute;
                     for (int k = 0; k < listOfHours.size(); k++) {
                         if (visitSystemUserVisit.getUserVisitTime().equals(listOfHours.get(k).getAvailableHour())) {
-                            for (int x = 0; x < duration / 60; x++) {
+                            for (int x = 0; x < duration / 15; x++) {
                                 listOfHours.get(k + x).setEmpty(false);
                             }
                         }

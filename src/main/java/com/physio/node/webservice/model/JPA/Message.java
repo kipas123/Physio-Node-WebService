@@ -27,7 +27,7 @@ public class Message {
 
     @ManyToOne
     @JsonBackReference
-    private Ailment ailment;
+    private MessageRoom messageRoom;
 
     @ManyToOne
     @JsonBackReference
@@ -38,6 +38,6 @@ public class Message {
     public Message(MessageWriteModel messageWriteModel){
         this.messageText = messageWriteModel.getMessageText();
         this.user = new User(messageWriteModel.getIduser());
-        this.ailment = new Ailment(messageWriteModel.getIdailment());
+        this.messageRoom = new MessageRoom(messageWriteModel.getIdmessageRoom());
     }
 }

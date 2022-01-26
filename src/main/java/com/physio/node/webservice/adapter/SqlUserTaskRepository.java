@@ -27,5 +27,6 @@ public interface SqlUserTaskRepository extends UserTaskRepository, JpaRepository
       @Query("SELECT COUNT(u) FROM User u WHERE u.userRole.roleName='unverified'")
       Long countUnverifiedUser();
 
-//    User findByIduser(int id User);
+
+      //    User findByIduser(int id User);
 }

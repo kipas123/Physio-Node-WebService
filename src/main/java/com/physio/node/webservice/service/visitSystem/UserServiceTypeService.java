@@ -80,9 +80,9 @@ public class UserServiceTypeService {
         for (int i = 0; i < listOfHours.size(); i++) {
             if (listOfHours.get(i).getAvailableHour().equals(localTime)) {
                 isTest = true;
-                Long durationBetween = Duration.between(listOfHours.get((int) (i + (duration / 75))).getAvailableHour(), timeOfEndHypotheticalService).toMinutes();
+                Long durationBetween = Duration.between(listOfHours.get((int) (i + (duration / 15))).getAvailableHour(), timeOfEndHypotheticalService).toMinutes();
                 if (durationBetween < 0) return false;
-                for (int k = 0; k <= duration / 75; k++) {
+                for (int k = 0; k <= duration / 15; k++) {
                     if (listOfHours.get(i + k).isEmpty() == false) return false;
                 }
             }

@@ -56,10 +56,6 @@ public class Ailment implements Serializable {
 	@JsonManagedReference(value="ailmentNotes")
 	private List<AilmentNote> ailmentNotes;
 
-	@OneToMany(mappedBy = "ailment")
-	@JsonManagedReference
-	private List<Message> message;
-
 	public Ailment() {
 	}
 	public Ailment(int idailment){

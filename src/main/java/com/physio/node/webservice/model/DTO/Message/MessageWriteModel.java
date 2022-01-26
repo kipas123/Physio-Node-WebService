@@ -11,12 +11,12 @@ public class MessageWriteModel {
 
 private String messageText;
 private int iduser;
-private int idailment;
+private int idmessageRoom;
 
 
-    public MessageWriteModel(String messageText, int iduser, int idailment){
+    public MessageWriteModel(String messageText, int iduser, int idmessageRoom){
         this.messageText = messageText;
         this.iduser = iduser;
-        this.idailment = idailment;
+        this.idmessageRoom = idmessageRoom;
     }
 }

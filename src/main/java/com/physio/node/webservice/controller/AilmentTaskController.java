@@ -40,7 +40,7 @@ public class AilmentTaskController {
     Availability: admin, physiotherapist,
     **/
     @PostMapping("/create")
-    public ResponseEntity<?> createGroup(@RequestBody AilmentWriteModel ailmentWriteModel) {
+    public ResponseEntity<?> createAilment(@RequestBody AilmentWriteModel ailmentWriteModel) {
         ailmentService.createAilment(ailmentWriteModel);
         return ResponseEntity.noContent().build();
     }
