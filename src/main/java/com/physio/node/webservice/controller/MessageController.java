@@ -1,5 +1,6 @@
 package com.physio.node.webservice.controller;
 
+import com.physio.node.webservice.model.DTO.Message.MessageNotificationDTO;
 import com.physio.node.webservice.model.DTO.Message.MessageReadModel;
 import com.physio.node.webservice.model.DTO.Message.MessageWriteModel;
 import com.physio.node.webservice.model.JPA.Message;
@@ -52,6 +53,17 @@ public class MessageController {
     @GetMapping("/countMessageByMessageRoomId/{messageRoomId}")
     public Long countMessageByMessageRoomId(@PathVariable int messageRoomId){
         return this.messageService.countMessageByMessageRoomId(messageRoomId);
+    }
+
+    @GetMapping("/getUserMessageNotification/{userId}")
+    public List<MessageNotificationDTO> getUserMessageNotification(@PathVariable int userId){
+        return messageService.getUserMessageNotification(userId);
+    }
+
+    @GetMapping("/deleteUserMessageNotification/{messageNotification}")
+    public ResponseEntity<?> deleteUserMessageNotification(@PathVariable int messageNotification){
+        messageService.deleteMessageNotification(messageNotification);
+        return ResponseEntity.ok().build();
     }
 
 

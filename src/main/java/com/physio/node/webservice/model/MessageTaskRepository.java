@@ -11,7 +11,7 @@ public interface MessageTaskRepository {
 //    List<Message> findAllByAilmentIdailmentOrderByPostDateDesc(int idailment, Pageable pageable);
     Message save(Message entity);
 //    Long countMessageByAilmentId(int idailment);
-  List<Message> findAllByMessageRoomIdmessageRoomOrderByPostDate(int messageRoomId, Pageable pageable);
+  List<Message> findAllByMessageRoomIdmessageRoomOrderByPostDateDesc(int messageRoomId, Pageable pageable);
   @Query("SELECT COUNT(u) FROM Message u WHERE u.messageRoom.idmessageRoom=:messageRoomId")
   Long countMessageByAilmentId(@Param("messageRoomId") int messageRoomId);
 

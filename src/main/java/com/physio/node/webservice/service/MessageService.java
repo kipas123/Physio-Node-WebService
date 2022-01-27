@@ -1,10 +1,13 @@
 package com.physio.node.webservice.service;
 
+import com.physio.node.webservice.model.DTO.Message.MessageNotificationDTO;
 import com.physio.node.webservice.model.DTO.Message.MessageReadModel;
 import com.physio.node.webservice.model.DTO.Message.MessageWriteModel;
 import com.physio.node.webservice.model.JPA.Message;
+import com.physio.node.webservice.model.JPA.MessageNotification;
 import com.physio.node.webservice.model.JPA.MessageRoom;
 import com.physio.node.webservice.model.JPA.User;
+import com.physio.node.webservice.model.MessageNotificationTaskRepository;
 import com.physio.node.webservice.model.MessageRoomTaskRepository;
 import com.physio.node.webservice.model.MessageTaskRepository;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +22,12 @@ public class MessageService {
 
     private MessageTaskRepository messageTaskRepository;
     private MessageRoomTaskRepository messageRoomTaskRepository;
+    private MessageNotificationTaskRepository messageNotificationTaskRepository;
 
-    public MessageService(MessageTaskRepository messageTaskRepository, MessageRoomTaskRepository messageRoomTaskRepository) {
+    public MessageService(MessageTaskRepository messageTaskRepository, MessageRoomTaskRepository messageRoomTaskRepository, MessageNotificationTaskRepository messageNotificationTaskRepository) {
         this.messageTaskRepository = messageTaskRepository;
         this.messageRoomTaskRepository = messageRoomTaskRepository;
+        this.messageNotificationTaskRepository = messageNotificationTaskRepository;
     }
 
     public int getMessageRoom(int firstUserId, int secondUserId) {
@@ -43,7 +48,7 @@ public class MessageService {
 
     public List<MessageReadModel> getMessageByRoomId(int messageRoomId, int size, int page) {
 
-        List<Message> messageList = messageTaskRepository.findAllByMessageRoomIdmessageRoomOrderByPostDate(messageRoomId, PageRequest.of(page,size));
+        List<Message> messageList = messageTaskRepository.findAllByMessageRoomIdmessageRoomOrderByPostDateDesc(messageRoomId, PageRequest.of(page,size));
         return messageList.stream().map(MessageReadModel::new).collect(Collectors.toList());
     }
 
@@ -52,12 +57,42 @@ public class MessageService {
     }
 
     public ResponseEntity<?> sendMessage(MessageWriteModel messageWriteModel){
+        Date postDate = new Date();
+        Optional<MessageRoom> messageRoom = messageRoomTaskRepository.findFirstByIdmessageRoom(messageWriteModel.getIdmessageRoom());
+        List<User> listOfMessageRoomUser = messageRoom.get().getMembership();
+        List<User> userRicipment = new ArrayList<>();
+        listOfMessageRoomUser.forEach(user -> {
+            if(user.getIduser()!=messageWriteModel.getIduser()){
+                userRicipment.add(user);
+            }
+        });
+        Optional<MessageNotification> messageNotification = messageNotificationTaskRepository.findFirstByUserRecipient_IduserAndUserSender_Iduser(userRicipment.get(0).getIduser(), messageWriteModel.getIduser());
+        if(messageNotification.isEmpty()) {
+            MessageNotification newMessageNotification = new MessageNotification(postDate, userRicipment.get(0), new User(messageWriteModel.getIduser()));
+            messageNotificationTaskRepository.save(newMessageNotification);
+        }else{
+            messageNotification.get().setPost_date(postDate);
+            messageNotificationTaskRepository.save(messageNotification.get());
+        }
+
         Message message = new Message(messageWriteModel);
+
         message.setPostDate(new Date());
         Message message1 = messageTaskRepository.save(message);
         if(message1==null){
             return  ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok().build();
+    }
+
+    public List<MessageNotificationDTO> getUserMessageNotification(int userId){
+        List<MessageNotificationDTO> messageNotificationDTO = messageNotificationTaskRepository.findAllByUserRecipient_Iduser(userId)
+                .stream()
+                .map(MessageNotificationDTO::new).collect(Collectors.toList());
+        return messageNotificationDTO;
+    }
+
+    public void deleteMessageNotification(int messageNotification) {
+        messageNotificationTaskRepository.delete(new MessageNotification(messageNotification));
     }
 }

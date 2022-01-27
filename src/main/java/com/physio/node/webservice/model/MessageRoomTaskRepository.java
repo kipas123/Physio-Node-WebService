@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface MessageRoomTaskRepository {
     Optional<MessageRoom> findFirstByMembershipContainsAndMembershipContains(User user, User user2);
     MessageRoom save(MessageRoom messageRoom);
+    Optional<MessageRoom> findFirstByIdmessageRoom(int idMessageRoom);
 }

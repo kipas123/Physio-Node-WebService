@@ -103,6 +103,13 @@ public class User implements Serializable {
 	@ManyToMany(mappedBy = "membership")
 	List<MessageRoom> messageRooms;
 
+	@OneToMany(mappedBy="userRecipient")
+	@JsonManagedReference
+	private List<MessageNotification> userRecipientNotification;
+
+	@OneToMany(mappedBy="userSender")
+	@JsonManagedReference
+	private List<MessageNotification> userSenderNotification;
 
 	@Transient
 	private String token;

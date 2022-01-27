@@ -10,5 +10,4 @@ import java.util.Optional;
 
 public interface SqlMessageRoomTaskRepository extends MessageRoomTaskRepository, JpaRepository<MessageRoom, Integer> {
 //    List<MessageRoom> findAllByFirstUserIduser
-
 }
