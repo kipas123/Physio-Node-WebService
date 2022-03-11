@@ -5,6 +5,7 @@ import com.physio.node.webservice.model.DTO.Message.MessageReadModel;
 import com.physio.node.webservice.model.DTO.Message.MessageWriteModel;
 import com.physio.node.webservice.model.JPA.Message;
 import com.physio.node.webservice.service.MessageService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,25 +40,29 @@ public class MessageController {
         return messageService.sendMessage(messageWriteModel);
     }
     @GetMapping("/getMessageRoom/{firstUserId}/{secondUserId}")
-    public int getMessageRoom(@PathVariable int firstUserId, @PathVariable int secondUserId){
-        return this.messageService.getMessageRoom(firstUserId, secondUserId);
+    public ResponseEntity<?> getMessageRoom(@PathVariable int firstUserId, @PathVariable int secondUserId){
+        int messageRoodId = this.messageService.getMessageRoom(firstUserId, secondUserId);
+        return new ResponseEntity<>(messageRoodId, HttpStatus.OK);
 
     }
 
 
     @GetMapping("/getMessageByRoomId/{messageRoomId}/{size}/{page}")
-    public List<MessageReadModel> getMessageByRoomId(@PathVariable int messageRoomId, @PathVariable int size, @PathVariable int page){
-        return this.messageService.getMessageByRoomId(messageRoomId, size, page);
+    public ResponseEntity<List<MessageReadModel>> getMessageByRoomId(@PathVariable int messageRoomId, @PathVariable int size, @PathVariable int page){
+        List<MessageReadModel> messageReadModel = messageService.getMessageByRoomId(messageRoomId, size, page);
+        return new ResponseEntity<>(messageReadModel, HttpStatus.OK);
     }
 
     @GetMapping("/countMessageByMessageRoomId/{messageRoomId}")
-    public Long countMessageByMessageRoomId(@PathVariable int messageRoomId){
-        return this.messageService.countMessageByMessageRoomId(messageRoomId);
+    public ResponseEntity<Long> countMessageByMessageRoomId(@PathVariable int messageRoomId){
+        Long counter = messageService.countMessageByMessageRoomId(messageRoomId);
+        return new ResponseEntity<>(counter, HttpStatus.OK);
     }
 
     @GetMapping("/getUserMessageNotification/{userId}")
-    public List<MessageNotificationDTO> getUserMessageNotification(@PathVariable int userId){
-        return messageService.getUserMessageNotification(userId);
+    public ResponseEntity<List<MessageNotificationDTO>> getUserMessageNotification(@PathVariable int userId){
+        List<MessageNotificationDTO> messageNotificationDTO = messageService.getUserMessageNotification(userId);
+        return new ResponseEntity<>(messageNotificationDTO, HttpStatus.OK);
     }
 
     @GetMapping("/deleteUserMessageNotification/{messageNotification}")

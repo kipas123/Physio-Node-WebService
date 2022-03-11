@@ -40,4 +40,5 @@ public class Message {
         this.user = new User(messageWriteModel.getIduser());
         this.messageRoom = new MessageRoom(messageWriteModel.getIdmessageRoom());
     }
+
 }

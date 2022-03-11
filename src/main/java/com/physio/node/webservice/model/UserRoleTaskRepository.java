@@ -2,7 +2,9 @@ package com.physio.node.webservice.model;
 
 import com.physio.node.webservice.model.JPA.UserRole;
 
+import java.util.Optional;
+
 public interface UserRoleTaskRepository {
-    UserRole findByRoleName(String roleName);
+    Optional<UserRole> findByRoleName(String roleName);
     UserRole findByIduserRole(int roleId);
 }

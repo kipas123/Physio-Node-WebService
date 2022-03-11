@@ -1,5 +1,7 @@
 package com.physio.node.webservice.service.visitSystem;
 
+import com.physio.node.webservice.Exception.ResourceBadRequestException;
+import com.physio.node.webservice.Exception.ResourceNotFoundException;
 import com.physio.node.webservice.adapter.visitSystem.SqlUserServiceTypeTaskRepository;
 import com.physio.node.webservice.model.JPA.User;
 import com.physio.node.webservice.model.DTO.VisitSystem.ChosenTermDTO;
@@ -32,24 +34,23 @@ public class UserServiceTypeService {
 
     public List<UserServiceTypeReadModel> getUserServiceType(int userId){
         return sqlUserServiceTypeTaskRepository
-                .findAllByUserOwnerIduserOrderByUserServiceTypeDuration(userId)
+                .findAllByUserOwnerIduserAndUserServiceTypeActiveOrderByUserServiceTypeDuration(userId, true)
                 .stream().map(UserServiceTypeReadModel::new).collect(Collectors.toList());
     }
 
-    public ResponseEntity<?> addService(UserServiceTypeWriteModel userServiceTypeWriteModel) {
+    public void addService(UserServiceTypeWriteModel userServiceTypeWriteModel) {
         int hour = userServiceTypeWriteModel.getUserServiceTypeDurationInMinute()/60;
         int minute = userServiceTypeWriteModel.getUserServiceTypeDurationInMinute()%60;
         LocalTime localTime = LocalTime.of(hour, minute);
         User user = new User(userServiceTypeWriteModel.getUserId());
-        VisitSystemUserServiceType visitSystemUserServiceType = new VisitSystemUserServiceType(userServiceTypeWriteModel.getUserServiceTypeName(), localTime, user);
+        VisitSystemUserServiceType visitSystemUserServiceType = new VisitSystemUserServiceType(userServiceTypeWriteModel.getUserServiceTypeName(), localTime, user, true);
         userServiceTypeTaskRepository.save(visitSystemUserServiceType);
-        return ResponseEntity.ok().build();
     }
 
     public List<UserServiceTypeReadModel> getAvailableUserServiceType(ChosenTermDTO chosenTermDTO) {
         LocalTime chosenTimeTerm = chosenTermDTO.getChosenTimeTerm();
         List<WorkHourListOfAvailableHourDTO> availableHours =userWorkService.getUserAvailableTerms(new CurrentDateAndUserDTO(chosenTermDTO.getChosenDataTerm(),chosenTermDTO.getServiceProviderId()));
-        List<VisitSystemUserServiceType> userServiceTypes = userServiceTypeTaskRepository.findAllByUserOwnerIduserOrderByUserServiceTypeDuration(chosenTermDTO.getServiceProviderId());
+        List<VisitSystemUserServiceType> userServiceTypes = userServiceTypeTaskRepository.findAllByUserOwnerIduserAndUserServiceTypeActiveOrderByUserServiceTypeDuration(chosenTermDTO.getServiceProviderId(), true);
         List<VisitSystemUserServiceType> userServiceTypeFiltered = new ArrayList<>();
         List<UserServiceTypeReadModel> userServiceTypeReadModel;
         int sizeOfList = userServiceTypes.size();
@@ -92,9 +93,13 @@ public class UserServiceTypeService {
 
     }
 
-    public ResponseEntity<?> deleteServiceById(int serviceId){
-        VisitSystemUserServiceType visitSystemUserServiceType = new VisitSystemUserServiceType(serviceId);
-        userServiceTypeTaskRepository.delete(visitSystemUserServiceType);
-        return ResponseEntity.ok().build();
+    public void deleteServiceById(int serviceId){
+        VisitSystemUserServiceType visitSystemUserServiceType = userServiceTypeTaskRepository.findByIdUserServiceType(serviceId).orElseThrow(() -> new ResourceNotFoundException("Not found service!"));
+        visitSystemUserServiceType.setUserServiceTypeActive(false);
+        try{
+            userServiceTypeTaskRepository.save(visitSystemUserServiceType);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
     }
 }

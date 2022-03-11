@@ -25,4 +25,10 @@ public class VisitSystemUserVisitStatus {
     @JsonManagedReference
     @OneToMany(mappedBy = "visitSystemUserVisitStatus")
     private List<VisitSystemUserVisit> visitSystemUserVisits;
+
+    public VisitSystemUserVisitStatus() { }
+
+    public VisitSystemUserVisitStatus(int idUserVisitStatus) {
+        this.idUserVisitStatus = idUserVisitStatus;
+    }
 }

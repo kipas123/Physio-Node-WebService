@@ -4,6 +4,7 @@ import com.physio.node.webservice.model.DTO.VisitSystem.CurrentDateAndUserDTO;
 import com.physio.node.webservice.model.DTO.VisitSystem.UserVisit.UserVisitReadModel;
 import com.physio.node.webservice.model.DTO.VisitSystem.UserVisit.UserVisitWriteModel;
 import com.physio.node.webservice.service.visitSystem.UserVisitService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,34 +21,50 @@ public class VisitSystemUserVisitTaskCtrl {
     }
 
     @PostMapping("/getVisitToAccept")
-    public List<UserVisitReadModel> getVisitToAccept(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
-        return userVisitService.getVisitToAccept(currentDateAndUserDTO);
+    public ResponseEntity<List<UserVisitReadModel>> getVisitToAccept(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
+        List<UserVisitReadModel> userVisitReadModel = userVisitService.getVisitToAccept(currentDateAndUserDTO);
+        return new ResponseEntity<>(userVisitReadModel, HttpStatus.OK);
     }
 
     @PostMapping("/getVisit")
-    public List<UserVisitReadModel> getVisit(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
-        return userVisitService.getVisit(currentDateAndUserDTO);
+    public ResponseEntity<List<UserVisitReadModel>> getVisit(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
+        List<UserVisitReadModel> userVisitReadModel = userVisitService.getVisit(currentDateAndUserDTO);
+        return new ResponseEntity<>(userVisitReadModel, HttpStatus.OK);
     }
 
     @PostMapping("/bookVisit")
         public ResponseEntity<?> bookVisit(@RequestBody UserVisitWriteModel userVisitWriteModel){
-        System.out.println(userVisitWriteModel);
-            return userVisitService.bookVisit(userVisitWriteModel);
+        userVisitService.bookVisit(userVisitWriteModel);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
     @PostMapping("/getUserUpcomingVisit")
-    public List<UserVisitReadModel> getUserUpcomingVisit(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
-        return userVisitService.getUserVisitFromDate(currentDateAndUserDTO);
+    public ResponseEntity<List<UserVisitReadModel>> getUserUpcomingVisit(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
+        List<UserVisitReadModel> userVisitReadModel = userVisitService.getUserVisitFromDate(currentDateAndUserDTO);
+        return new ResponseEntity<>(userVisitReadModel, HttpStatus.OK);
     }
     {}
     @GetMapping("/getUserVisit/{userId}")
-    public List<UserVisitReadModel> getUserVisit(@PathVariable int userId){
-        return userVisitService.getUserVisit(userId);
+    public ResponseEntity<List<UserVisitReadModel>> getUserVisit(@PathVariable int userId){
+        List<UserVisitReadModel> userVisitReadModel = userVisitService.getUserVisit(userId);
+        return new ResponseEntity<>(userVisitReadModel, HttpStatus.OK);
     }
 
-    @GetMapping("/getProviderVisit/{userId}")
-    public List<UserVisitReadModel> getProviderVisit(@PathVariable int userId){
-        return userVisitService.getProviderVisit(userId);
+    @GetMapping("/getProviderVisit/{userId}/{page}/{size}")
+    public ResponseEntity<List<UserVisitReadModel>> getProviderVisit(@PathVariable int userId, @PathVariable int page, @PathVariable int size){
+        List<UserVisitReadModel> userVisitReadModel = userVisitService.getProviderVisit(userId, page, size);
+        return new ResponseEntity<>(userVisitReadModel, HttpStatus.OK);
+    }
+
+    @GetMapping("/countProviderVisit/{userId}")
+    public ResponseEntity<Long> countProviderVisit(@PathVariable int userId){
+        Long countProviderVisit = userVisitService.countProviderVisit(userId);
+        return new ResponseEntity<>(countProviderVisit, HttpStatus.OK);
+    }
+    @GetMapping("/changeVisitStatus/{visitId}/{statusId}")
+    public ResponseEntity<?> changeVisitStatus(@PathVariable int visitId, @PathVariable int statusId){
+        userVisitService.changeVisitStatus(visitId,statusId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

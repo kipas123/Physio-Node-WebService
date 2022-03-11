@@ -1,5 +1,7 @@
 package com.physio.node.webservice.service;
 
+import com.physio.node.webservice.Exception.ResourceBadRequestException;
+import com.physio.node.webservice.Exception.ResourceNotFoundException;
 import com.physio.node.webservice.model.AilmentIndicationTaskRepository;
 import com.physio.node.webservice.model.AilmentNoteTaskRepository;
 import com.physio.node.webservice.model.AilmentTaskRepository;
@@ -29,18 +31,19 @@ public class AilmentService {
         this.ailmentIndicationTaskRepository = ailmentIndicationTaskRepository;
     }
     public List<AilmentReadModel> findAllUserAilmentByIdUser(int id){  //by id
-        return ailmentTaskRepository.findAllByUserIduser(id)
+        List<Ailment> ailments = ailmentTaskRepository.findAllByUserIduser(id);
+        if (ailments.isEmpty()) {
+            throw new ResourceNotFoundException("Not found for IdUser" + id);
+        }
+        return ailments
                 .stream().
                         map(ailment ->
-                                new AilmentReadModel(ailment.getIdailment(), ailment.getAilmentName(), ailment.getAilmentDescription()))
+                                new AilmentReadModel(ailment.getIdailment(), ailment.getAilmentName(), ailment.getAilmentDescription(), ailment.getAttendingphysician()))
                              .collect(Collectors.toList());
     }
     public AilmentReadModel findAilmentByIdAilment(int id){  //by id
-        Optional<Ailment> ailment = ailmentTaskRepository.findFirstByIdailment(id);
-        if(ailment.isEmpty()){
-            throw new NullPointerException("Brak choroby");
-        }
-        AilmentReadModel ailmentReadModel = new AilmentReadModel(ailment.get());
+        Ailment ailment = ailmentTaskRepository.findFirstByIdailment(id).orElseThrow(() -> new ResourceNotFoundException("Not found for idAilment: " + id));
+        AilmentReadModel ailmentReadModel = new AilmentReadModel(ailment);
         return ailmentReadModel;
     }
 
@@ -51,16 +54,36 @@ public class AilmentService {
         attendingphysician.setIduser(ailmentWriteModel.getAttendingphysician());
 
         Ailment createdAilment = new Ailment(ailmentWriteModel.getAilmentName(), ailmentWriteModel.getAilmentDescription(), userAilment, attendingphysician);
-        ailmentTaskRepository.save(createdAilment);
+        try{
+            ailmentTaskRepository.save(createdAilment);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
     }
     public void createAilmentNote(AilmentNoteDTO ailmentNoteDTO){
         Ailment ailment = new Ailment(ailmentNoteDTO.getAilmentId());
         AilmentNote createdAilmentNote = new AilmentNote(ailmentNoteDTO.getNoteHeader(), ailmentNoteDTO.getNoteDescription(), ailment);
-        ailmentNoteTaskRepository.save(createdAilmentNote);
+        try{
+            ailmentNoteTaskRepository.save(createdAilmentNote);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
     }
     public void createAilmentIndication(AilmentIndicationDTO ailmentIndicationDTO){
         Ailment ailment = new Ailment(ailmentIndicationDTO.getAilmentId());
         AilmentIndication createdAilmentIndication = new AilmentIndication(ailmentIndicationDTO.getIndicationHeader(), ailmentIndicationDTO.getIndicationDescription(), ailment);
-        ailmentIndicationTaskRepository.save(createdAilmentIndication);
+        try{
+            ailmentIndicationTaskRepository.save(createdAilmentIndication);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
+    }
+
+    public void deleteAilment(int ailmentId) {
+        try{
+            ailmentTaskRepository.delete(new Ailment(ailmentId));
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument" + e);
+        }
     }
 }

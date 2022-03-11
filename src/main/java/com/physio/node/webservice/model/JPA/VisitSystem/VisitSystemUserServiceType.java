@@ -24,6 +24,9 @@ public class VisitSystemUserServiceType {
     @Column(name = "user_service_type_duration")
     private LocalTime userServiceTypeDuration;
 
+    @Column(name = "user_service_type_active")
+    private Boolean userServiceTypeActive;
+
     @ManyToOne
     @JoinColumn(name = "user_iduser")
     @JsonBackReference(value = "user_iduser")
@@ -39,9 +42,10 @@ public class VisitSystemUserServiceType {
         this.idUserServiceType = idUserServiceType;
     }
 
-    public VisitSystemUserServiceType(String userServiceTypeName, LocalTime userServiceTypeDuration, User userOwner) {
+    public VisitSystemUserServiceType(String userServiceTypeName, LocalTime userServiceTypeDuration, User userOwner, Boolean userServiceTypeActive) {
         this.userServiceTypeName = userServiceTypeName;
         this.userServiceTypeDuration = userServiceTypeDuration;
         this.userOwner = userOwner;
+        this.userServiceTypeActive = userServiceTypeActive;
     }
 }

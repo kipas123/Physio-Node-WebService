@@ -9,10 +9,10 @@ import java.time.LocalTime;
 public class UserVisitWriteModel {
     private int userId;
     private Date bookingDate;
-    private int userServiceId;
+    private String userServiceId;
     private LocalTime bookingTime;
 
-    public UserVisitWriteModel(int userId, Date bookingDate, int userServiceId, LocalTime bookingTime) {
+    public UserVisitWriteModel(int userId, Date bookingDate, String userServiceId, LocalTime bookingTime) {
         this.userId = userId;
         this.bookingDate = bookingDate;
         this.userServiceId = userServiceId;

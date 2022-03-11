@@ -5,6 +5,7 @@ import com.physio.node.webservice.model.DTO.VisitSystem.UserWorkHour.UserWorkHou
 import com.physio.node.webservice.model.DTO.VisitSystem.UserWorkHour.UserWorkHourWriteModel;
 import com.physio.node.webservice.model.DTO.VisitSystem.WorkHourListOfAvailableHourDTO;
 import com.physio.node.webservice.service.visitSystem.UserWorkService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,33 +23,40 @@ public class VisitSystemUserWorkTaskCtrl {
     }
 
     @PostMapping("/listOfAvailableDay")
-    public Set<Integer>  getListOfAvailableDay(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
-        return userWorkService.getListOfAvailableDay(currentDateAndUserDTO);
+    public ResponseEntity<Set<Integer>>  getListOfAvailableDay(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
+        Set<Integer> listOfAvailableDay = userWorkService.getListOfAvailableDay(currentDateAndUserDTO);
+        return new ResponseEntity<>(listOfAvailableDay, HttpStatus.OK);
     }
 
     @PostMapping("/listOfAvailableHour")
-    public List<WorkHourListOfAvailableHourDTO> getListOfAvailableHour(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
-        return userWorkService.getListOfAvailableHour(currentDateAndUserDTO);
+    public ResponseEntity<List<WorkHourListOfAvailableHourDTO>> getListOfAvailableHour(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
+        List<WorkHourListOfAvailableHourDTO> workHourListOfAvailableHourDTO = userWorkService.getListOfAvailableHour(currentDateAndUserDTO);
+        return new ResponseEntity<>(workHourListOfAvailableHourDTO, HttpStatus.OK);
     }
 
     @PostMapping("/getUserAvailableTerms")
-    public List<WorkHourListOfAvailableHourDTO> getUserAvailableTerms(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
-        return userWorkService.getUserAvailableTerms(currentDateAndUserDTO);
+    public ResponseEntity<List<WorkHourListOfAvailableHourDTO>> getUserAvailableTerms(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
+        List<WorkHourListOfAvailableHourDTO> workHourListOfAvailableHourDTO = userWorkService.getUserAvailableTerms(currentDateAndUserDTO);
+        return new ResponseEntity<>(workHourListOfAvailableHourDTO, HttpStatus.OK);
     }
 
     @PostMapping("/getUserWorkHour")
-    public List<UserWorkHourReadModel> getUserWorkHour(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
-        return userWorkService.getUserWorkHour( currentDateAndUserDTO.getCurrentDate(),currentDateAndUserDTO.getUserId());
+    public ResponseEntity<List<UserWorkHourReadModel>> getUserWorkHour(@RequestBody CurrentDateAndUserDTO currentDateAndUserDTO){
+        List<UserWorkHourReadModel> userWorkHourReadModel = userWorkService.getUserWorkHour( currentDateAndUserDTO.getCurrentDate(),currentDateAndUserDTO.getUserId());
+        return new ResponseEntity<>(userWorkHourReadModel, HttpStatus.OK);
     }
 
     @PostMapping("/createWorkHour")
     public ResponseEntity<?> createUserWorkHour(@RequestBody UserWorkHourWriteModel userWorkHourWriteModel){
-        return this.userWorkService.createUserWorkHour(userWorkHourWriteModel);
+
+        userWorkService.createUserWorkHour(userWorkHourWriteModel);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/deleteWorkHourByIdWorkHour/{workHourId}")
     public ResponseEntity<?> deleteWorkHourByIdWorkHour(@PathVariable int workHourId){
-        return this.userWorkService.deleteWorkHourByWorkHourId(workHourId);
+        userWorkService.deleteWorkHourByWorkHourId(workHourId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 //    @GetMapping("/getAvailableDays")
 //    public Set<Integer> getDate(){

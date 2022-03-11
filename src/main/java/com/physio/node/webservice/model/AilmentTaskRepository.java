@@ -9,5 +9,6 @@ public interface AilmentTaskRepository {
     List<Ailment> findAllByUserIduser(int user);
     Optional<Ailment> findFirstByIdailment(int id);
     Ailment save(Ailment ailment);
+    void delete(Ailment ailment);
 
 }

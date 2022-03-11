@@ -10,6 +10,7 @@ import java.util.Date;
 
 @Data
 public class UserVisitReadModel {
+    private int idUserVisit;
     private UserReadModel userDTO;
     private LocalTime userVisitTime;
     private UserServiceTypeReadModel userServiceTypeDTO;
@@ -17,6 +18,7 @@ public class UserVisitReadModel {
     private UserReadModel visitProvider;
 
     public UserVisitReadModel(VisitSystemUserVisit visitSystemUserVisit){
+        this.idUserVisit = visitSystemUserVisit.getIdUserVisit();
         this.userDTO = new UserReadModel(visitSystemUserVisit.getUser());
         this.userVisitTime = visitSystemUserVisit.getUserVisitTime();
         this.userServiceTypeDTO = new UserServiceTypeReadModel(visitSystemUserVisit.getVisitSystemUserServiceType());

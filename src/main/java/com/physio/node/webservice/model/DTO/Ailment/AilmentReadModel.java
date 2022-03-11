@@ -19,10 +19,11 @@ public class AilmentReadModel {
 
     public AilmentReadModel(){}
 
-    public AilmentReadModel(int idailment, String ailmentName, String ailmentDescription){
+    public AilmentReadModel(int idailment, String ailmentName, String ailmentDescription, User attendingphysician){
         this.idailment = idailment;
         this.ailmentName = ailmentName;
         this.ailmentDescription = ailmentDescription;
+        this.attendingphysician = new UserReadModel(attendingphysician);
     }
 
     public AilmentReadModel(Ailment ailment) {

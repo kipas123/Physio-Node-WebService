@@ -7,7 +7,8 @@ import java.util.Optional;
 
 public interface UserServiceTypeTaskRepository {
     VisitSystemUserServiceType save(VisitSystemUserServiceType visitSystemUserServiceType);
-    List<VisitSystemUserServiceType> findAllByUserOwnerIduserOrderByUserServiceTypeDuration(int idUser);
+    List<VisitSystemUserServiceType> findAllByUserOwnerIduserAndUserServiceTypeActiveOrderByUserServiceTypeDuration(int idUser, boolean active);
     Optional<VisitSystemUserServiceType> findFirstByUserOwnerIduserOrderByUserServiceTypeDuration(int idUser);
+    Optional<VisitSystemUserServiceType> findByIdUserServiceType(int idService);
     void delete(VisitSystemUserServiceType visitSystemUserServiceType);
 }

@@ -10,4 +10,5 @@ public interface MygroupTaskRepository {
     List<Mygroup> findAll();
     Mygroup save(Mygroup entity);
     List<Mygroup> findAllByMygroupOwner(User user);
+    void delete(Mygroup mygroup);
 }

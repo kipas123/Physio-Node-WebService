@@ -1,5 +1,7 @@
 package com.physio.node.webservice.service;
 
+import com.physio.node.webservice.Exception.ResourceBadRequestException;
+import com.physio.node.webservice.Exception.ResourceNotFoundException;
 import com.physio.node.webservice.model.DTO.Mygroup.MyGroupReadModel;
 import com.physio.node.webservice.model.DTO.Mygroup.MyGroupUserListDTO;
 import com.physio.node.webservice.model.DTO.Mygroup.MyGroupWriteModel;
@@ -31,27 +33,42 @@ public class MygroupService {
     public List<MyGroupReadModel> findAllGroupsByUserOwner(int id){
         User a = new User();
         a.setIduser(id);
-        return mygroupTaskRepository.findAllByMygroupOwner(a)
+        List<MyGroupReadModel> myGroupReadModel = mygroupTaskRepository.findAllByMygroupOwner(a)
                 .stream().map(MyGroupReadModel::new).collect(Collectors.toList());
+        if (myGroupReadModel.isEmpty()) {
+            throw new ResourceNotFoundException("Not found!");
+        }
+        return myGroupReadModel;
     }
 
     public List<MyGroupReadModel> findAllGroupsByUserId(int id){
-        User user = userTaskRepository.findByIduser(id);
+        User user = userTaskRepository.findByIduser(id).orElseThrow(()-> new ResourceNotFoundException("Not found!"));
         List<MyGroupReadModel> usersGroups = user.getUserMygroups().stream().map(
                 Mygroup_Users-> new MyGroupReadModel(Mygroup_Users.getMygroup())
         ).collect(Collectors.toList());
+        if (usersGroups.isEmpty()) {
+            throw new ResourceNotFoundException("Not found!");
+        }
         return usersGroups;
     }
 
 
     public List<MyGroupReadModel> findAllGroups(){
-        return mygroupTaskRepository.findAll()
+        List<MyGroupReadModel> myGroupReadModel = mygroupTaskRepository.findAll()
                 .stream().map(MyGroupReadModel::new).collect(Collectors.toList());
+        if (myGroupReadModel.isEmpty()) {
+            throw new ResourceNotFoundException("Not found!");
+        }
+        return myGroupReadModel;
     }
 
     public void createGroup(MyGroupWriteModel mygroup){
         Mygroup createdMygroup = new Mygroup(mygroup);
-        mygroupTaskRepository.save(createdMygroup);
+        try{
+            mygroupTaskRepository.save(mygroupTaskRepository.save(createdMygroup));
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
     }
 
     public MyGroupReadModel findGroupByGroupId(int id) {
@@ -68,7 +85,12 @@ public class MygroupService {
         System.out.println("Tutaj jestem - " + myGroupWriteModel.getIdmygroup());
         Mygroup findMyGroup = mygroupTaskRepository.findByIdmygroup(myGroupWriteModel.getIdmygroup());
         mygroup.setMygroupOwner(findMyGroup.getMygroupOwner());
-        mygroupTaskRepository.save(mygroup);
+        try{
+            mygroupTaskRepository.save(mygroup);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
+
     }
 
     public List<MyGroupUserListDTO> findAllUsersByMygroupId(int id){
@@ -76,25 +98,43 @@ public class MygroupService {
                 .getUserMygroups().
                         stream().
                         map(userMyGroup -> new MyGroupUserListDTO(userMyGroup.getUser())).collect(Collectors.toList());
+        if (userList.isEmpty()) {
+            throw new ResourceNotFoundException("Not found for IdUser" + id);
+        }
         return userList;
     }
 
-    public ResponseEntity<?> addUserToGroup(int userId, int mygroupId){
+    public void addUserToGroup(int userId, int mygroupId){
         Mygroup mygroup = mygroupTaskRepository.findByIdmygroup(mygroupId);
-        User user = userTaskRepository.findByIduser(userId);
-        if(mygroup == null || user == null) return ResponseEntity.badRequest().build();
-        if(mygroup_usersTaskRepository.findAllByUser_IduserAndMygroup_Idmygroup(userId, mygroupId).size()!=0) return ResponseEntity.badRequest().build();
+        User user = userTaskRepository.findByIduser(userId).orElseThrow(()-> new ResourceNotFoundException("Not found!"));
+        if(mygroup == null || user == null) throw new ResourceNotFoundException("Not found!");
+        if(mygroup_usersTaskRepository.findAllByUser_IduserAndMygroup_Idmygroup(userId, mygroupId).size()!=0) throw new ResourceNotFoundException("Not found!");
         Mygroup_UsersPK mygroup_usersPK = new Mygroup_UsersPK(userId, mygroupId);
         Mygroup_Users mygroup_users = new Mygroup_Users(mygroup_usersPK, mygroup, user);
-        mygroup_usersTaskRepository.save(mygroup_users);
-        return ResponseEntity.ok().build();
+        try{
+            mygroup_usersTaskRepository.save(mygroup_users);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
     }
 
-    public ResponseEntity<?> removeUserFromGroup(int userId, int mygroupId){
+    public void removeUserFromGroup(int userId, int mygroupId){
         Optional<Mygroup_Users> mygroup_users  = mygroup_usersTaskRepository
                 .findByUserIduserAndMygroupIdmygroup(userId,mygroupId);
-        if(mygroup_users.isEmpty()) return ResponseEntity.badRequest().build();
-        mygroup_usersTaskRepository.delete(mygroup_users.get());
-        return ResponseEntity.ok().build();
+        if(mygroup_users.isEmpty())  throw new ResourceNotFoundException("Not found!");
+
+        try{
+            mygroup_usersTaskRepository.delete(mygroup_users.get());
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
+    }
+
+    public void deleteGroup(int groupId) {
+        try{
+            mygroupTaskRepository.delete(new Mygroup(groupId));
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument" + e);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.physio.node.webservice.controller;
 
 import com.physio.node.webservice.jwt.JwtTokenProvider;
+import com.physio.node.webservice.model.DTO.Auth.PasswordChangeModel;
 import com.physio.node.webservice.model.DTO.Auth.PasswordResetModel;
 import com.physio.node.webservice.model.DTO.User.UserReadModel;
 import com.physio.node.webservice.model.DTO.User.UserWriteModel;
@@ -35,7 +36,8 @@ public class AuthTaskController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserWriteModel user){
-        return authService.registerUser(user);
+        authService.registerUser(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
@@ -43,22 +45,25 @@ public class AuthTaskController {
     Reset Password impl
  */
     @GetMapping("/resetTokenValidation/{token}")
-    boolean isResetTokenValid(@PathVariable String token){
-        try{
+    ResponseEntity<?> isResetTokenValid(@PathVariable String token){
             boolean valid = userService.findUserByUserPasswordResetToken(token);
-            return valid;
-        }catch (NoSuchElementException e){
-            return false;
-        }
-
+            return new ResponseEntity<>(valid, HttpStatus.OK);
     }
     @GetMapping("/genereateResetToken/{email}")
     ResponseEntity<?> generateResetToken(@PathVariable String email){
         return authService.executePaswordReset(email);
     }
-    @PostMapping("/changePasswordWithResetToken")
+
+    @PutMapping("/changePasswordWithResetToken")
     ResponseEntity<?> changePasswordByResetToken(@RequestBody PasswordResetModel passwordResetModel){
-        return authService.changePassword(passwordResetModel);
+        authService.resetPassword(passwordResetModel);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/changePassword")
+    ResponseEntity<?> changePassword(@RequestBody PasswordChangeModel passwordChangeModel){
+        authService.changePassword(passwordChangeModel);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

@@ -6,7 +6,9 @@ import com.physio.node.webservice.model.DTO.Ailment.AilmentWriteModel;
 import com.physio.node.webservice.model.DTO.Exercise.ExerciseDetailsWriteModel;
 import com.physio.node.webservice.model.DTO.Exercise.ExerciseReadModel;
 import com.physio.node.webservice.model.DTO.Exercise.ExerciseWriteModel;
+import com.physio.node.webservice.model.JPA.ExerciseBook;
 import com.physio.node.webservice.service.ExerciseService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,23 +25,33 @@ public class ExerciseTaskController {
     }
 
     @GetMapping("/{id}")
-    public ExerciseReadModel getExerciseByIdExercise(@PathVariable int id) {
-        return exerciseService.findExerciseByIdExercise(id);
+    public ResponseEntity<ExerciseReadModel> getExerciseByIdExercise(@PathVariable int id) {
+        ExerciseReadModel exerciseReadModel = exerciseService.findExerciseByIdExercise(id);
+        return new ResponseEntity<>(exerciseReadModel, HttpStatus.OK);
     }
 
     @GetMapping("/user/{id}")
-    public List<ExerciseReadModel> getAllUserExerciseByIdUser(@PathVariable int id) {
-        return exerciseService.getAllUserExerciseByIdUser(id);
+    public ResponseEntity<List<ExerciseReadModel>> getAllUserExerciseByIdUser(@PathVariable int id) {
+        List<ExerciseReadModel> exerciseReadModel = exerciseService.getAllUserExerciseByIdUser(id);
+        return new ResponseEntity<>(exerciseReadModel, HttpStatus.OK);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> createAilment(@RequestBody ExerciseWriteModel exerciseWriteModel) {
-        return exerciseService.createExercise(exerciseWriteModel);
+        exerciseService.createExercise(exerciseWriteModel);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/createExerciseDetail")
     public ResponseEntity<?> createExerciseDetail(@RequestBody ExerciseDetailsWriteModel exerciseDetailsWriteModel) {
-        return exerciseService.createExerciseDetail(exerciseDetailsWriteModel);
+        exerciseService.createExerciseDetail(exerciseDetailsWriteModel);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/deleteExerciseBook/{exerciseBookId}")
+    public ResponseEntity<?> deleteExerciseBook(@PathVariable int exerciseBookId){
+        exerciseService.deleteExerciseBook(exerciseBookId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

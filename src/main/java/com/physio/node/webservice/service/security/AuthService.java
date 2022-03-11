@@ -1,6 +1,9 @@
 package com.physio.node.webservice.service.security;
 
+import com.physio.node.webservice.Exception.ResourceBadRequestException;
+import com.physio.node.webservice.Exception.ResourceNotFoundException;
 import com.physio.node.webservice.jwt.JwtTokenProvider;
+import com.physio.node.webservice.model.DTO.Auth.PasswordChangeModel;
 import com.physio.node.webservice.model.DTO.Auth.PasswordResetModel;
 import com.physio.node.webservice.model.DTO.User.UserReadModel;
 import com.physio.node.webservice.model.DTO.User.UserWriteModel;
@@ -54,11 +57,14 @@ public class AuthService {
 
 
     public ResponseEntity<?> executePaswordReset(String email){
-        Optional<User> user = userTaskRepository.findByUserEmail(email);
-        if(user.isEmpty()) return ResponseEntity.badRequest().build();
+        User user = userTaskRepository.findByUserEmail(email).orElseThrow(()-> new ResourceNotFoundException("Not found by email:" + email));
         String token = RandomString.make(30);
-        user.get().setResetPasswordToken(token);
-        userTaskRepository.save(user.get());
+        user.setResetPasswordToken(token);
+        try{
+            userTaskRepository.save(user);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
         try {
             MimeMessage mimeMessage = getJavaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
@@ -75,28 +81,47 @@ public class AuthService {
             return ResponseEntity.badRequest().build();
         }
     }
-    public ResponseEntity<?> changePassword(PasswordResetModel passwordResetModel) {
-        Optional<User> user = userTaskRepository.findByResetPasswordToken(passwordResetModel.getToken());
-        if(user.isEmpty()) return ResponseEntity.badRequest().build();
-        user.get().setUserPassword(passwordEncoder.encode(passwordResetModel.getPassword()));
-        user.get().setResetPasswordToken(null);
-        userTaskRepository.save(user.get());
-        return ResponseEntity.ok().build();
+    public void resetPassword(PasswordResetModel passwordResetModel) {
+        User user = userTaskRepository.findByResetPasswordToken(passwordResetModel.getToken()).orElseThrow(() -> new ResourceNotFoundException("Not found"));
+        user.setUserPassword(passwordEncoder.encode(passwordResetModel.getPassword()));
+        user.setResetPasswordToken(null);
+        try{
+            userTaskRepository.save(user);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
+    }
+
+    public void changePassword(PasswordChangeModel passwordChangeModel) {
+
+        User user = userTaskRepository.findByIduser(passwordChangeModel.getUserId()).orElseThrow(() -> new ResourceNotFoundException("Not found"));
+        boolean isTrue = passwordEncoder.matches(passwordChangeModel.getOldPassword(), user.getUserPassword());
+        System.out.println(isTrue);
+        if(isTrue == false) throw new ResourceBadRequestException("Wrong password!");
+        user.setUserPassword(passwordEncoder.encode(passwordChangeModel.getNewPassword()));
+        try{
+            userTaskRepository.save(user);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
     }
 
 
-    public ResponseEntity<?> registerUser(UserWriteModel userWriteModel){
-        Optional<User> user = userTaskRepository.findByUserEmail(userWriteModel.getUserEmail());
-        if(!user.isEmpty()){
+    public void registerUser(UserWriteModel userWriteModel){
+        User user = userTaskRepository.findByUserEmail(userWriteModel.getUserEmail()).orElseThrow(() -> new ResourceNotFoundException("Not found"));
+        if(user!=null){
             System.out.println(userWriteModel.getUserEmail());
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return;
         }
-        UserRole userRole = userRoleTaskRepository.findByRoleName("unverified");
+        UserRole userRole = userRoleTaskRepository.findByRoleName("unverified").get();
         userWriteModel.setUserPassword(passwordEncoder.encode(userWriteModel.getUserPassword()));
         User createdUser = new User(userWriteModel);
         createdUser.setUserRole(userRole);
-
-        return new ResponseEntity<>(userTaskRepository.save(createdUser), HttpStatus.CREATED);
+        try{
+            userTaskRepository.save(createdUser);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
     }
 
 

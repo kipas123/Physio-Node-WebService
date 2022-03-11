@@ -1,5 +1,7 @@
 package com.physio.node.webservice.service;
 
+import com.physio.node.webservice.Exception.ResourceBadRequestException;
+import com.physio.node.webservice.Exception.ResourceNotFoundException;
 import com.physio.node.webservice.model.DTO.Message.MessageNotificationDTO;
 import com.physio.node.webservice.model.DTO.Message.MessageReadModel;
 import com.physio.node.webservice.model.DTO.Message.MessageWriteModel;
@@ -34,14 +36,18 @@ public class MessageService {
         User firstUser = new User(firstUserId);
         User secondUser = new User(secondUserId);
         Optional<MessageRoom> messageRoom = this.messageRoomTaskRepository.findFirstByMembershipContainsAndMembershipContains(firstUser,secondUser);
-        if(messageRoom.isEmpty()){
+        if(messageRoom.isEmpty()){ //uwaga
             MessageRoom newMessageRoom = new MessageRoom();
             List<User> listOfMembership = new ArrayList<>();
             listOfMembership.add(firstUser);
             listOfMembership.add(secondUser);
             newMessageRoom.setMembership(listOfMembership);
-            newMessageRoom = messageRoomTaskRepository.save(newMessageRoom);
-            return newMessageRoom.getIdmessageRoom();
+            try{
+                newMessageRoom = messageRoomTaskRepository.save(newMessageRoom);
+                return newMessageRoom.getIdmessageRoom();
+            }catch (Exception e){
+                throw new ResourceBadRequestException("Error: Bad argument");
+            }
         }
         return messageRoom.get().getIdmessageRoom();
     }
@@ -49,6 +55,9 @@ public class MessageService {
     public List<MessageReadModel> getMessageByRoomId(int messageRoomId, int size, int page) {
 
         List<Message> messageList = messageTaskRepository.findAllByMessageRoomIdmessageRoomOrderByPostDateDesc(messageRoomId, PageRequest.of(page,size));
+        if (messageList.isEmpty()) {
+            throw new ResourceNotFoundException("Not found!");
+        }
         return messageList.stream().map(MessageReadModel::new).collect(Collectors.toList());
     }
 
@@ -89,10 +98,17 @@ public class MessageService {
         List<MessageNotificationDTO> messageNotificationDTO = messageNotificationTaskRepository.findAllByUserRecipient_Iduser(userId)
                 .stream()
                 .map(MessageNotificationDTO::new).collect(Collectors.toList());
+        if (messageNotificationDTO.isEmpty()) {
+            throw new ResourceNotFoundException("Not found!");
+        }
         return messageNotificationDTO;
     }
 
     public void deleteMessageNotification(int messageNotification) {
-        messageNotificationTaskRepository.delete(new MessageNotification(messageNotification));
+        try{
+            messageNotificationTaskRepository.delete(new MessageNotification(messageNotification));
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
     }
 }

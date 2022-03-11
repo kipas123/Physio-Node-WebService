@@ -17,8 +17,11 @@ public interface SqlUserTaskRepository extends UserTaskRepository, JpaRepository
       @Query("SELECT u FROM User u WHERE u.userEmail=:value OR u.userName=:value OR u.userSurname=:value")
       List<User> findAllByUserNameOrUserSurname(@Param("value") String value);
 
-      @Query("SELECT u FROM User u WHERE u.userEmail=:value OR u.userName=:value OR u.userSurname=:value AND u.userRole.roleName = 'unverified'")
+      @Query("SELECT u FROM User u WHERE (u.userEmail=:value OR u.userName=:value OR u.userSurname=:value) AND u.userRole.roleName = 'unverified'")
       List<User> findAllUnverifiedUserByUserNameOrUserSurname(@Param("value") String value);
+
+      @Query("SELECT u FROM User u WHERE (u.userEmail=:value OR u.userName=:value OR u.userSurname=:value) AND u.userRole.roleName <> 'unverified'")
+      List<User> findAllVerifiedUserByUserNameOrUserSurname(@Param("value") String value);
 
       @Query("SELECT u FROM User u WHERE u.userRole.roleName='physiotherapist' OR u.userRole.roleName='admin' OR u.userRole.roleName='coach'")
       List<User> findAllUserWithModRole();
@@ -26,6 +29,7 @@ public interface SqlUserTaskRepository extends UserTaskRepository, JpaRepository
 
       @Query("SELECT COUNT(u) FROM User u WHERE u.userRole.roleName='unverified'")
       Long countUnverifiedUser();
+
 
 
       //    User findByIduser(int id User);

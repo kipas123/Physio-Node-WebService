@@ -20,6 +20,9 @@ public class VisitSystemUserVisit {
     @Column(name = "user_visit_time")
     private LocalTime userVisitTime;
 
+    @Column(name = "user_visit_accepted")
+    private boolean accepted;
+
     @ManyToOne
     @JoinColumn(name = "visit_system_user_work_day_idvisit_system_user_work_day")
     @JsonBackReference
@@ -45,11 +48,12 @@ public class VisitSystemUserVisit {
     private VisitSystemUserVisitStatus visitSystemUserVisitStatus;
     public VisitSystemUserVisit(){}
 
-    public VisitSystemUserVisit(LocalTime userVisitTime, VisitSystemUserWorkDay visitSystemUserWorkDay, VisitSystemUserServiceType visitSystemUserServiceType, User user, VisitSystemUserVisitStatus visitSystemUserVisitStatus) {
+    public VisitSystemUserVisit(LocalTime userVisitTime, VisitSystemUserWorkDay visitSystemUserWorkDay, VisitSystemUserServiceType visitSystemUserServiceType, User user, VisitSystemUserVisitStatus visitSystemUserVisitStatus, boolean accepted) {
         this.userVisitTime = userVisitTime;
         this.visitSystemUserWorkDay = visitSystemUserWorkDay;
         this.visitSystemUserServiceType = visitSystemUserServiceType;
         this.user = user;
         this.visitSystemUserVisitStatus = visitSystemUserVisitStatus;
+        this.accepted = accepted;
     }
 }

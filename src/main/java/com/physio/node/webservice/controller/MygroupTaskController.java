@@ -6,6 +6,7 @@ import com.physio.node.webservice.model.DTO.Mygroup.MyGroupWriteModel;
 import com.physio.node.webservice.model.MygroupTaskRepository;
 import com.physio.node.webservice.service.MygroupService;
 import com.physio.node.webservice.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,21 +28,24 @@ public class MygroupTaskController {
         /*
     Availability: admin
     **/
-    @GetMapping("/all/{id}")
-    List<MyGroupReadModel> getAllGroupsByUserOwner(@PathVariable int id){
-        return mygroupService.findAllGroupsByUserOwner(id);
+    @GetMapping("/all/{userOwnerId}")
+    ResponseEntity<List<MyGroupReadModel>> getAllGroupsByUserOwner(@PathVariable int userOwnerId){
+        List<MyGroupReadModel> myGroupReadModel = mygroupService.findAllGroupsByUserOwner(userOwnerId);
+        return new ResponseEntity<>(myGroupReadModel, HttpStatus.OK);
     }
     /*
     Availability: admin, physiotherapist, coach
     **/
-    @GetMapping("/userList/{id}")
-    List<MyGroupUserListDTO> getAllUsersByMygroupId(@PathVariable int id){
-        return mygroupService.findAllUsersByMygroupId(id);
+    @GetMapping("/userList/{groupId}")
+    ResponseEntity<List<MyGroupUserListDTO>> getAllUsersByMygroupId(@PathVariable int groupId){
+        List<MyGroupUserListDTO> myGroupReadModel = mygroupService.findAllUsersByMygroupId(groupId);
+        return new ResponseEntity<>(myGroupReadModel, HttpStatus.OK);
     }
 
-    @GetMapping("/all/user/{id}")
-    List<MyGroupReadModel> getAllGroupByUserId(@PathVariable int id){
-        return mygroupService.findAllGroupsByUserId(id);
+    @GetMapping("all/user/{userId}")
+    ResponseEntity<List<MyGroupReadModel>> getAllGroupByUserId(@PathVariable int userId){
+        List<MyGroupReadModel> myGroupReadModel = mygroupService.findAllGroupsByUserId(userId);
+        return new ResponseEntity<>(myGroupReadModel, HttpStatus.OK);
     }
 
 
@@ -49,16 +53,18 @@ public class MygroupTaskController {
     Availability: admin, physiotherapist, coach
     **/
     @GetMapping("/{id}")
-    MyGroupReadModel getGroupByGroupId(@PathVariable int id){
-        return mygroupService.findGroupByGroupId(id);
+    ResponseEntity<MyGroupReadModel> getGroupByGroupId(@PathVariable int id){
+        MyGroupReadModel myGroupReadModel = mygroupService.findGroupByGroupId(id);
+        return new ResponseEntity<>(myGroupReadModel, HttpStatus.OK);
     }
 
     /*
     Availability: coach
     **/
     @GetMapping("/all")
-    List<MyGroupReadModel> getAllGroups(){
-        return mygroupService.findAllGroups();
+    ResponseEntity<List<MyGroupReadModel>> getAllGroups(){
+        List<MyGroupReadModel> myGroupReadModel = mygroupService.findAllGroups();
+        return new ResponseEntity<>(myGroupReadModel, HttpStatus.OK);
     }
 
     /*
@@ -80,11 +86,21 @@ public class MygroupTaskController {
 
     @GetMapping("/addUserToGroup/{userId}/{groupId}")
     ResponseEntity<?> addUserToGroup(@PathVariable int userId, @PathVariable int groupId){
-        return mygroupService.addUserToGroup(userId, groupId);
+        mygroupService.addUserToGroup(userId, groupId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/removeUserFromGroup/{userId}/{groupId}")
     ResponseEntity<?> removeUserFromGroup(@PathVariable int userId, @PathVariable int groupId){
-        return mygroupService.removeUserFromGroup(userId, groupId);
+        mygroupService.removeUserFromGroup(userId, groupId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/deleteGroup/{groupId}")
+    ResponseEntity<?> deleteGroup( @PathVariable int groupId){
+        mygroupService.deleteGroup(groupId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

@@ -66,7 +66,7 @@ public class UserWorkService {
         return userWorkHourReadModel;
     }
 
-    public ResponseEntity<?> createUserWorkHour(UserWorkHourWriteModel userWorkHourWriteModel){
+    public void createUserWorkHour(UserWorkHourWriteModel userWorkHourWriteModel){
         VisitSystemUserWorkDay visitSystem_userWorkDay;
         Optional<VisitSystemUserWorkDay> userWorkDay = userWorkDayTaskRepository.findByUserWorkDayAndUserIduser(userWorkHourWriteModel.getUserWorkDay(), userWorkHourWriteModel.getUserId());
         if(userWorkDay.isEmpty()){
@@ -76,11 +76,10 @@ public class UserWorkService {
             visitSystem_userWorkDay = userWorkDayTaskRepository.save(visitSystem_userWorkDay);
             VisitSystemUserWorkHour visitSystem_userWorkHour = new VisitSystemUserWorkHour(userWorkHourWriteModel.getUserWorkHourBeginningTime(), userWorkHourWriteModel.getUserWorkHourEndingTime(),visitSystem_userWorkDay);
             userWorkHourTaskRepository.save(visitSystem_userWorkHour);
-            return ResponseEntity.ok().build();
+            return;
         }
         VisitSystemUserWorkHour visitSystem_userWorkHour = new VisitSystemUserWorkHour(userWorkHourWriteModel.getUserWorkHourBeginningTime(), userWorkHourWriteModel.getUserWorkHourEndingTime(),userWorkDay.get());
         userWorkHourTaskRepository.save(visitSystem_userWorkHour);
-        return ResponseEntity.ok().build();
     }
 
     public Set<Integer>  getListOfAvailableDay(CurrentDateAndUserDTO currentDateAndUserDTO) {
@@ -125,7 +124,7 @@ public class UserWorkService {
 
         //reserved hours
         List<VisitSystemUserVisit> visitSystemUserVisits = userVisitTaskRepository
-                .findAllByVisitSystemUserWorkDay_UserWorkDayAndVisitSystemUserWorkDayUserIduser(currentDateAndUserDTO.getCurrentDate(), currentDateAndUserDTO.getUserId());
+                .findAllImportantVisit(currentDateAndUserDTO.getCurrentDate(), currentDateAndUserDTO.getUserId());
 
         visitSystemUserVisits.stream().forEach(
                 visitSystemUserVisit -> {
@@ -145,9 +144,8 @@ public class UserWorkService {
         return listOfHours;
     }
 
-    public ResponseEntity<?> deleteWorkHourByWorkHourId(int workHourId) {
+    public void deleteWorkHourByWorkHourId(int workHourId) {
         VisitSystemUserWorkHour visitSystemUserWorkHour = new VisitSystemUserWorkHour(workHourId);
         userWorkHourTaskRepository.delete(visitSystemUserWorkHour);
-        return ResponseEntity.ok().build();
     }
 }

@@ -10,4 +10,5 @@ public interface ExerciseBookTaskRepository {
     List<ExerciseBook> findAllByUserIduser(int idUser);
     ExerciseBook save(ExerciseBook exerciseBook);
     Optional<ExerciseBook> findFirstByIdexerciseBook(int id);
+    void delete (ExerciseBook exerciseBook);
 }

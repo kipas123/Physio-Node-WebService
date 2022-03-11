@@ -9,6 +9,7 @@ import com.physio.node.webservice.service.UserService;
 import com.physio.node.webservice.service.security.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +31,9 @@ public class UserTaskController {
     Availability: admin, physiotherapist, coach
     **/
     @GetMapping("/{id}")
-    UserReadModel getUserByIdUser(@PathVariable int id){
-        return userService.findUserByIdUser(id);
+    ResponseEntity<UserReadModel> getUserByIdUser(@PathVariable int id){
+        UserReadModel userReadModel = userService.findUserByIdUser(id);
+        return new ResponseEntity<>(userReadModel, HttpStatus.OK);
     }
 
     @GetMapping("/test")
@@ -41,38 +43,46 @@ public class UserTaskController {
 
 
     @GetMapping("/roleManagement/foundUser/{value}")
-    public List<UserReadModel> getUserByEmailOrNameOrSurname(@PathVariable String value){
-        List<UserReadModel> userList = userService.findUserByEmailOrNameOrSurname(value);
-        if(userList.size()==0) userList = null;
-        return userList;
+    public ResponseEntity<List<UserReadModel>> getUserByEmailOrNameOrSurname(@PathVariable String value){
+        List<UserReadModel> userReadModel = userService.findUserByEmailOrNameOrSurname(value);
+        return new ResponseEntity<>(userReadModel, HttpStatus.OK);
     }
 
     @GetMapping("/roleManagement/foundUserFiltr/{value}")
-    public List<UserReadModel> getUnverifiedUserByUserNameOrUserSurname(@PathVariable String value){
-        List<UserReadModel> userList = userService.findUnverifiedUserByUserNameOrUserSurname(value);
-        if(userList.size()==0) userList = null;
-        return userList;
+    public ResponseEntity<List<UserReadModel>> getUnverifiedUserByUserNameOrUserSurname(@PathVariable String value){
+        List<UserReadModel> userReadModel = userService.findUnverifiedUserByUserNameOrUserSurname(value);
+        return new ResponseEntity<>(userReadModel, HttpStatus.OK);
+    }
+
+    @GetMapping("/roleManagement/foundVerifiedUserFiltr/{value}")
+    public ResponseEntity<List<UserReadModel>> getVerifiedUserByUserNameOrUserSurname(@PathVariable String value){
+        List<UserReadModel> userReadModel = userService.findVerifiedUserByUserNameOrUserSurname(value);
+        return new ResponseEntity<>(userReadModel, HttpStatus.OK);
     }
 
     @GetMapping("/roleManagement/changeRole/{userId}/{roleId}")
     public ResponseEntity<?> getUserByEmailOrNameOrSurname(@PathVariable int userId, @PathVariable int roleId){
         userService.changeUserRole(userId, roleId);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/roleManagement/unverified/{page}/{size}")
-    public List<UserReadModel> getAllUnverifiedUser(@PathVariable int page, @PathVariable int size){
-        return userService.findUnverifiedUser(page, size);
+    public ResponseEntity<List<UserReadModel>> getAllUnverifiedUser(@PathVariable int page, @PathVariable int size){
+        List<UserReadModel> userReadModel = userService.findUnverifiedUser(page, size);
+        return new ResponseEntity<>(userReadModel, HttpStatus.OK);
     }
 
 
     @GetMapping("/roleManagement/modRole")
-    public List<UserReadModel> getUsersWithModRole(){
-        return userService.findUsersWithModRole();
+    public ResponseEntity<List<UserReadModel>> getUsersWithModRole(){
+
+        List<UserReadModel> userReadModel = userService.findUsersWithModRole();
+        return new ResponseEntity<>(userReadModel, HttpStatus.OK);
     }
     @GetMapping("/roleManagement/countUnverfied")
-    public Long getCountOfUnverfiedUser(){
-        return userService.countUnverifedUser();
+    public ResponseEntity<Long> getCountOfUnverfiedUser(){
+        Long counter = userService.countUnverifedUser();
+        return new ResponseEntity<>(counter,HttpStatus.OK);
     }
 
 

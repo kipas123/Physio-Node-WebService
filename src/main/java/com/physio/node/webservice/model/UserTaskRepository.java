@@ -10,16 +10,18 @@ import java.util.Optional;
 
 public interface UserTaskRepository {
     List<User> findAll();
-    User findByIduser(int id);
+    Optional<User> findByIduser(int id);
     List<User> findByUserName(String username);
     User save(User entity);
   Optional<User> findByUserEmail(String email);
     List<User> findAllByUserNameOrUserSurname(String value);
     List<User> findAllUnverifiedUserByUserNameOrUserSurname(String value);
+    List<User> findAllVerifiedUserByUserNameOrUserSurname(String value);
     List<User> findAllByUserRole_RoleName(String roleName, Pageable pageable);
     List<User> findAllByUserRole_RoleName(String roleName);
     Long countUnverifiedUser();
     List<User> findAllUserWithModRole();
     Optional<User> findByResetPasswordToken(String resetPasswordToken);
+    Optional<User> findByUserPassword(String password);
 
 }

@@ -44,6 +44,10 @@ public class Mygroup implements Serializable {
 	public Mygroup() {
 	}
 
+	public Mygroup(int idmygroup) {
+		this.idmygroup = idmygroup;
+	}
+
 	public Mygroup(String mygroupName, String mygroupDescription, User mygroupOwner) {
 		this.mygroupName = mygroupName;
 		this.mygroupDescription = mygroupDescription;

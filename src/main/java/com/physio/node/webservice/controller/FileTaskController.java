@@ -35,35 +35,35 @@ public class FileTaskController {
             fileStorageService.store(file, userId, ailmentId);
 
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
-            return ResponseEntity.ok().build();
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
         }
     }
 
-    @GetMapping("/files")
-    public ResponseEntity<List<AilmentFileDTO>> getListFiles() {
-        List<AilmentFileDTO> files = fileStorageService.getAllFiles().map(dbFile -> {
-            String fileDownloadUri = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/files/")
-                    .path(dbFile.getIdailmentFiles())
-                    .toUriString();
-
-            return new AilmentFileDTO(
-                    dbFile.getIdailmentFiles(),
-                    dbFile.getName(),
-                    fileDownloadUri,
-                    dbFile.getType(),
-                    dbFile.getData().length,
-                    dbFile.getDateAdded(),
-                    dbFile.getUser().getIduser());
-        }).collect(Collectors.toList());
-
-        System.out.println("Zaczekaj");
-        return ResponseEntity.status(HttpStatus.OK).body(files);
-    }
+//    @GetMapping("/files")
+//    public ResponseEntity<List<AilmentFileDTO>> getListFiles() {
+//        List<AilmentFileDTO> files = fileStorageService.getAllFiles().map(dbFile -> {
+//            String fileDownloadUri = ServletUriComponentsBuilder
+//                    .fromCurrentContextPath()
+//                    .path("/files/")
+//                    .path(dbFile.getIdailmentFiles())
+//                    .toUriString();
+//
+//            return new AilmentFileDTO(
+//                    dbFile.getIdailmentFiles(),
+//                    dbFile.getName(),
+//                    fileDownloadUri,
+//                    dbFile.getType(),
+//                    dbFile.getData().length,
+//                    dbFile.getDateAdded(),
+//                    dbFile.getUser().getIduser());
+//        }).collect(Collectors.toList());
+//
+//        System.out.println("Zaczekaj");
+//        return new ResponseEntity<>(files, HttpStatus.OK);
+//    }
 
     @GetMapping("/files/{ailmentId}")
     public ResponseEntity<List<AilmentFileDTO>> getListFiles(@PathVariable int ailmentId) {
