@@ -95,7 +95,7 @@ public class UserService {
 
     public void changeUserRole(int userId, int roleId) {
         User user = userTaskRepository.findByIduser(userId).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
-        UserRole userRole = userRoleTaskRepository.findByIduserRole(roleId);
+        UserRole userRole = userRoleTaskRepository.findByIduserRole(roleId).orElseThrow(() -> new ResourceNotFoundException("Role not found!"));;
         user.setUserRole(userRole);
         userTaskRepository.save(user);
     }

@@ -1,5 +1,7 @@
 package com.physio.node.webservice.service.visitSystem;
 
+import com.physio.node.webservice.Exception.ResourceBadRequestException;
+import com.physio.node.webservice.Exception.ResourceNotFoundException;
 import com.physio.node.webservice.model.JPA.User;
 import com.physio.node.webservice.model.DTO.VisitSystem.CurrentDateAndUserDTO;
 import com.physio.node.webservice.model.DTO.VisitSystem.UserWorkHour.UserWorkHourReadModel;
@@ -62,7 +64,9 @@ public class UserWorkService {
         List<UserWorkHourReadModel> userWorkHourReadModel = userWorkHourTaskRepository.findAllByVisitSystemUserWorkDay_UserWorkDayAndVisitSystemUserWorkDayUserIduser(date, userId)
                 .stream()
                 .map(UserWorkHourReadModel::new).collect(Collectors.toList());
-        System.out.println("Test");
+//        if (userWorkHourReadModel.isEmpty()) {
+//            throw new ResourceNotFoundException("Not found");
+//        }
         return userWorkHourReadModel;
     }
 
@@ -75,19 +79,30 @@ public class UserWorkService {
             visitSystem_userWorkDay = new VisitSystemUserWorkDay(userWorkHourWriteModel.getUserWorkDay(), user);
             visitSystem_userWorkDay = userWorkDayTaskRepository.save(visitSystem_userWorkDay);
             VisitSystemUserWorkHour visitSystem_userWorkHour = new VisitSystemUserWorkHour(userWorkHourWriteModel.getUserWorkHourBeginningTime(), userWorkHourWriteModel.getUserWorkHourEndingTime(),visitSystem_userWorkDay);
-            userWorkHourTaskRepository.save(visitSystem_userWorkHour);
+            try{
+                userWorkHourTaskRepository.save(visitSystem_userWorkHour);
+            }catch (Exception e){
+                throw new ResourceBadRequestException("Error");
+            }
             return;
         }
         VisitSystemUserWorkHour visitSystem_userWorkHour = new VisitSystemUserWorkHour(userWorkHourWriteModel.getUserWorkHourBeginningTime(), userWorkHourWriteModel.getUserWorkHourEndingTime(),userWorkDay.get());
-        userWorkHourTaskRepository.save(visitSystem_userWorkHour);
+        try{
+            userWorkHourTaskRepository.save(visitSystem_userWorkHour);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error");
+        }
     }
 
     public Set<Integer>  getListOfAvailableDay(CurrentDateAndUserDTO currentDateAndUserDTO) {
         LocalDate currentDate=  currentDateAndUserDTO.getCurrentDate().toLocalDate();
         LocalDate startDate = currentDateAndUserDTO.getCurrentDate().toLocalDate().withDayOfMonth(1);
-        LocalDate endDate = currentDateAndUserDTO.getCurrentDate().toLocalDate().withDayOfMonth(31);
+        LocalDate endDate = currentDateAndUserDTO.getCurrentDate().toLocalDate().withDayOfMonth(29);
         Set<Integer> days = new HashSet<>();
         Set<java.util.Date> dateWork =  userWorkDayTaskRepository.getUserWorkDate(Date.valueOf(startDate), Date.valueOf(endDate), 1);
+//        if (dateWork.isEmpty()) {
+//            throw new ResourceNotFoundException("Not found");
+//        }
         dateWork.stream().forEach(date -> days.add(date.getDate()));
         return  days;
 
@@ -146,6 +161,10 @@ public class UserWorkService {
 
     public void deleteWorkHourByWorkHourId(int workHourId) {
         VisitSystemUserWorkHour visitSystemUserWorkHour = new VisitSystemUserWorkHour(workHourId);
-        userWorkHourTaskRepository.delete(visitSystemUserWorkHour);
+        try{
+            userWorkHourTaskRepository.delete(visitSystemUserWorkHour);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error");
+        }
     }
 }

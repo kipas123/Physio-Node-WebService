@@ -75,7 +75,7 @@ public class AilmentService {
         try{
             ailmentIndicationTaskRepository.save(createdAilmentIndication);
         }catch (Exception e){
-            throw new ResourceBadRequestException("Error: Bad argument");
+            throw new ResourceBadRequestException("Error: Bad argument" + e);
         }
     }
 

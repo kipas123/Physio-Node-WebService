@@ -33,9 +33,14 @@ public class UserServiceTypeService {
     }
 
     public List<UserServiceTypeReadModel> getUserServiceType(int userId){
-        return sqlUserServiceTypeTaskRepository
+        List<UserServiceTypeReadModel> userServiceTypeReadModel = sqlUserServiceTypeTaskRepository
                 .findAllByUserOwnerIduserAndUserServiceTypeActiveOrderByUserServiceTypeDuration(userId, true)
                 .stream().map(UserServiceTypeReadModel::new).collect(Collectors.toList());
+        if (userServiceTypeReadModel.isEmpty()) {
+            throw new ResourceNotFoundException("Not found!");
+        }
+
+        return userServiceTypeReadModel;
     }
 
     public void addService(UserServiceTypeWriteModel userServiceTypeWriteModel) {
@@ -44,7 +49,11 @@ public class UserServiceTypeService {
         LocalTime localTime = LocalTime.of(hour, minute);
         User user = new User(userServiceTypeWriteModel.getUserId());
         VisitSystemUserServiceType visitSystemUserServiceType = new VisitSystemUserServiceType(userServiceTypeWriteModel.getUserServiceTypeName(), localTime, user, true);
-        userServiceTypeTaskRepository.save(visitSystemUserServiceType);
+        try{
+            userServiceTypeTaskRepository.save(visitSystemUserServiceType);
+        }catch (Exception e){
+            throw new ResourceBadRequestException("Error: Bad argument");
+        }
     }
 
     public List<UserServiceTypeReadModel> getAvailableUserServiceType(ChosenTermDTO chosenTermDTO) {

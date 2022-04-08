@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface UserRoleTaskRepository {
     Optional<UserRole> findByRoleName(String roleName);
-    UserRole findByIduserRole(int roleId);
+    Optional<UserRole> findByIduserRole(int roleId);
 }

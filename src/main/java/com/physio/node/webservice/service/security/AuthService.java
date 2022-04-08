@@ -68,12 +68,12 @@ public class AuthService {
         try {
             MimeMessage mimeMessage = getJavaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-            String htmlMsg = "<h3>Resetowanie hasła</h3>" +
-                    "<br/> Kliknij link: http://localhost:4200/pages/password-reset-change/" + token;
+            String htmlMsg = "<h3>Reset password</h3>" +
+                    "<br/> Follow the link: http://localhost:4200/pages/password-reset-change/" + token;
 //mimeMessage.setContent(htmlMsg, "text/html"); /** Use this or below line **/
             helper.setText(htmlMsg, true); // Use this or above line.
             helper.setTo(email);
-            helper.setSubject("Reset hasła");
+            helper.setSubject("Password reset - physioNode");
             helper.setFrom("Fizjo-node.pl");
             getJavaMailSender.send(mimeMessage);
             return ResponseEntity.ok().build();
